@@ -30,8 +30,9 @@ export const AuthGuard = (props) => {
     const userLocalStorage = localStorage.getItem('session')
     const userJson = JSON.parse(userLocalStorage as string)
     
-    const accessTokenData = parseJwt(sessionJson?.accessToken) as any
-    const tokenExpired = accessTokenData.exp < Date.now() / 1000
+    const accessTokenData = sessionJson?.accessToken ? parseJwt(sessionJson?.accessToken) as any : null
+    
+    const tokenExpired = accessTokenData ? accessTokenData.exp < Date.now() / 1000 : true
     
     if (!sessionJson || !userJson || tokenExpired) {
       console.log('Not authenticated, redirecting');
