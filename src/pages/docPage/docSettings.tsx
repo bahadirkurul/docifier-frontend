@@ -5,7 +5,7 @@ import { MainLayout } from '../../layouts/dashboard/layout'
 import { DocSideNav } from './sections/sideNav'
 import { EditDoc } from './sections/editDoc'
 
-const DocDetails = () => {
+const DocSettings = () => {
   const auth = useAuthContext() as any
 
   useEffect(() => {
@@ -16,9 +16,7 @@ const DocDetails = () => {
       const docs = ((await auth.getDocs()) as any[]) || []
       const isDocExist = docs.find((doc) => doc.docId === id)
   
-      if (!isDocExist) {
-        window.location.href = '/'
-      }
+
     }
 
     getDoc()
@@ -34,10 +32,10 @@ const DocDetails = () => {
         }}
       >
         <Grid container spacing={5}>
-          <Grid xs={12} md={4} lg={3} xl={2}>
+          <Grid xs={12} md={4} lg={2}>
             <DocSideNav />
           </Grid>
-          <Grid xs={12} md={8} lg={9} xl={8}>
+          <Grid xs={12} md={8} lg={10}>
 
            <EditDoc/>
           </Grid>
@@ -47,4 +45,4 @@ const DocDetails = () => {
   )
 }
 
-export default DocDetails
+export default DocSettings

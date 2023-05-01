@@ -1,5 +1,6 @@
 import PropTypes from 'prop-types';
 import ArrowRightIcon from '@heroicons/react/24/solid/ArrowRightIcon';
+import TrashIcon from '@heroicons/react/24/solid/TrashIcon';
 import {
   Box,
   Button,
@@ -16,9 +17,17 @@ import {
   TableRow
 } from '@mui/material';
 import { Scrollbar } from '../../../components/scrollbar';
+import { useAuthContext } from '../../../contexts/auth-context';
 
 export const OverviewLatestOrders = (props) => {
   const { docs = [], sx } = props;
+  const auth = useAuthContext() as any;
+  
+  const handleSubmit = async (docId: string) => {
+    await auth.deleteDoc(docId)
+
+    window.location.reload()
+  }
 
   return (
     <Card sx={sx}>
@@ -31,6 +40,7 @@ export const OverviewLatestOrders = (props) => {
               <TableRow>
                 <TableCell>Title</TableCell>
                 <TableCell>Doc ID</TableCell>
+                <TableCell>Actions</TableCell>
               </TableRow>
             </TableHead>
             <TableBody>
@@ -38,9 +48,38 @@ export const OverviewLatestOrders = (props) => {
                 return (
                   <TableRow hover key={doc.docId}>
                     <TableCell>
-                      <Link href={`/docs?id=${doc.docId}`}>{doc.alias}</Link>
+                      <Button
+                        color="primary"
+                        endIcon={
+                          <SvgIcon fontSize="small">
+                            <ArrowRightIcon />
+                          </SvgIcon>
+                        }
+                        size="small"
+                        variant="text"
+                        href={`/docs?id=${doc.docId}`}
+                      >
+                        {doc.alias}
+                      </Button>
                     </TableCell>
                     <TableCell>{doc.docId}</TableCell>
+                    <TableCell>
+                      <Button
+                        color="inherit"
+                        endIcon={
+                          <SvgIcon fontSize="small">
+                            <TrashIcon />
+                          </SvgIcon>
+                        }
+                        size="small"
+                        variant="text"
+                        onClick={() => {
+                          handleSubmit(doc.docId)
+                        }}
+                      >
+                        Delete
+                      </Button>
+                    </TableCell>
                   </TableRow>
                 )
               })}

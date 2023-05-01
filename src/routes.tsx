@@ -5,6 +5,7 @@ import Login from "./pages/auth/login";
 import Register from "./pages/auth/register";
 import CreateDoc from "./pages/createDoc/CreateDoc";
 import DocDetails from "./pages/docPage/docPage";
+import DocSettings from "./pages/docPage/docSettings";
 import Homepage from "./pages/index/Homepage";
 
 export const routes = [
@@ -23,6 +24,14 @@ export const routes = [
   {
     path: '/docs',
     element: <AuthGuard><DocDetails /></AuthGuard>,
+  },
+  {
+    path: '/docs/settings',
+    element: <AuthGuard><DocSettings /></AuthGuard>,
+  },
+  {
+    path: '/docs/overview',
+    element: <AuthGuard><DocSettings /></AuthGuard>,
   },
   {
     path: '/auth/login',

@@ -27,7 +27,7 @@ export const AuthGuard = (props) => {
     const sessionLocalStorage = localStorage.getItem('session')
     const sessionJson = JSON.parse(sessionLocalStorage as string)
     
-    const userLocalStorage = localStorage.getItem('session')
+    const userLocalStorage = localStorage.getItem('user')
     const userJson = JSON.parse(userLocalStorage as string)
     
     const accessTokenData = sessionJson?.accessToken ? parseJwt(sessionJson?.accessToken) as any : null
