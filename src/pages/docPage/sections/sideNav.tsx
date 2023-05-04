@@ -1,102 +1,142 @@
-import { useCallback, useRef, useState } from 'react'
-import { Box, Button, Card, CardActions, CardContent, CardHeader, Divider, List, Stack, SvgIconProps, TextField, Toolbar, Tooltip, Typography, styled, buttonClasses } from '@mui/material'
+import { useRef } from 'react'
+import { Box, ButtonBase, Card, CardContent, CardHeader, Divider, Stack } from '@mui/material'
 import { useAuthContext } from '../../../contexts/auth-context'
-import { Logo } from '../../../components/logo'
 import { Scrollbar } from '../../../components/scrollbar'
-import { userTabs, documentations } from '../../../layouts/dashboard/config'
 import { useLocation } from 'react-router-dom'
 import { DocSideNavItem } from './side-nav-item'
 import { staticDocTabs } from './config'
-import { TreeItem, TreeItemProps, TreeView, treeItemClasses } from '@mui/lab'
-import ExpandMoreIcon from '@mui/icons-material/ExpandMore'
-import ChevronRightIcon from '@mui/icons-material/ChevronRight'
-import MailIcon from '@mui/icons-material/Mail'
-import DeleteIcon from '@mui/icons-material/Delete'
-import Label from '@mui/icons-material/Label'
-import SupervisorAccountIcon from '@mui/icons-material/SupervisorAccount'
-import InfoIcon from '@mui/icons-material/Info'
-import ForumIcon from '@mui/icons-material/Forum'
-import LocalOfferIcon from '@mui/icons-material/LocalOffer'
+import { TreeView, TreeItem } from '@mui/lab'
 import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown'
+import TextSnippet from '@mui/icons-material/Description'
 import ArrowRightIcon from '@mui/icons-material/ArrowRight'
+import { Tree } from 'react-arborist'
+import DocumentTextIcon from '@heroicons/react/24/solid/DocumentTextIcon'
 
-declare module 'react' {
-  interface CSSProperties {
-    '--tree-view-color'?: string
-    '--tree-view-bg-color'?: string
-  }
-}
-
-type StyledTreeItemProps = TreeItemProps & {
-  bgColor?: string
-  color?: string
-  labelIcon: React.ElementType<SvgIconProps>
-  labelInfo?: any
-  labelText: string
-}
-
-const StyledTreeItemRoot = styled(TreeItem)(({ theme }) => ({
-  color: theme.palette.text.secondary,
-  [`& .${treeItemClasses.content}`]: {
-    color: theme.palette.text.secondary,
-    borderTopRightRadius: theme.spacing(2),
-    borderBottomRightRadius: theme.spacing(2),
-    paddingRight: theme.spacing(1),
-    fontWeight: theme.typography.fontWeightMedium,
-    '&.Mui-expanded': {
-      fontWeight: theme.typography.fontWeightRegular,
-    },
-    '&:hover': {
-      backgroundColor: theme.palette.action.hover,
-      [`.hierarchyButton`]: {
-        display: 'inline-block',
-      }
-    },
-    '&.Mui-focused, &.Mui-selected, &.Mui-selected.Mui-focused': {
-      backgroundColor: `var(--tree-view-bg-color, ${theme.palette.action.selected})`,
-      color: 'var(--tree-view-color)',
-    },
-    [`& .${treeItemClasses.label}`]: {
-      fontWeight: 'inherit',
-      color: 'inherit',
-    },
+const items = [
+  {
+    title: 'Getting Started',
+    id: 'getting-started',
+    children: [],
+    order: 1,
+    type: "document"
   },
-  [`& .${treeItemClasses.group}`]: {
-    marginLeft: 0,
-    [`& .${treeItemClasses.content}`]: {
-      paddingLeft: theme.spacing(2),
-    },
+  {
+    title: 'Authentication',
+    id: 'authentication',
+    type: "folder",
+    children: [
+      {
+        title: 'Login',
+        id: 'login',
+        type: "document",
+        children: [],
+        order: 1
+      },
+    ],
+    order: 2,
   },
-}))
+  {
+    title: 'Getting Started',
+    id: 'getting-started',
+    children: [],
+    order: 3,
+    type: "document"
+  },
+]
 
-function StyledTreeItem(props: StyledTreeItemProps) {
-  const { bgColor, color, labelIcon: LabelIcon, labelInfo, labelText, ...other } = props
-
-  return (
-    <StyledTreeItemRoot
-      label={
-        <Box sx={{ display: 'flex', alignItems: 'center', p: 0.5, pr: 0 }}>
-          <Typography variant="body2" sx={{ fontWeight: 'inherit', flexGrow: 1 }}>
-            {labelText}
-          </Typography>
-          <Typography variant="caption" color="inherit">
-            {labelInfo}
-          </Typography>
-        </Box>
-      }
-      style={{
-        '--tree-view-color': color,
-        '--tree-view-bg-color': bgColor,
-      }}
-      {...other}
-    />
-  )
-}
+const data = [
+  { id: "1", name: "Unread" },
+  { id: "2", name: "Threads" },
+  {
+    id: "3",
+    name: "Chat Rooms",
+    children: [
+      { id: "c1", name: "General", children: [
+        { id: "c12", name: "General" },
+        { id: "c22", name: "Random" },
+        { id: "c32", name: "Open Source Projects" },
+      ], },
+      { id: "c2", name: "Random" },
+      { id: "c3", name: "Open Source Projects" },
+    ],
+  },
+  {
+    id: "4",
+    name: "Direct Messages",
+    children: [
+      { id: "d1", name: "Alice" },
+      { id: "d2", name: "Bob" },
+      { id: "d3", name: "Charlie" },
+    ],
+  },
+];
 
 export const DocSideNav = () => {
   const test = useRef('')
   const auth = useAuthContext() as any
   const location = useLocation()
+  
+  function Node({ node, style, dragHandle }) {
+    /* This node instance can do many things. See the API reference. */
+
+    return (
+            <ButtonBase
+            style={style} ref={dragHandle} onClick={() => node.toggle()}
+            sx={{
+              alignItems: 'center',
+              borderRadius: 1,
+              display: 'flex',
+              justifyContent: 'flex-start',
+              pl: '16px',
+              pr: '16px',
+              py: '6px',
+              textAlign: 'left',
+              width: '100%',
+              ...(node.isSelected && {
+                backgroundColor: 'rgba(255, 255, 255, 0.04)'
+              }),
+              '&:hover': {
+                backgroundColor: 'rgba(255, 255, 255, 0.04)'
+              }
+            }}
+          >
+              <Box
+                component="span"
+                sx={{
+                  alignItems: 'center',
+                  color: 'neutral.400',
+                  display: 'inline-flex',
+                  justifyContent: 'center',
+                  mr: 2,
+                  ...(node.isSelected && !node.isInternal  && {
+                    color: 'primary.main'
+                  })
+                }}
+              >
+                {node.isInternal && node.isOpen && <ArrowDropDownIcon/>}
+                {node.isInternal && !node.isOpen && <ArrowRightIcon/>}
+                {node.isLeaf && <TextSnippet fontSize='small'/>}
+              </Box>
+            <Box
+              component="span"
+              sx={{
+                color: 'neutral.400',
+                flexGrow: 1,
+                fontFamily: (theme) => theme.typography.fontFamily,
+                fontSize: 14,
+                fontWeight: 600,
+                lineHeight: '24px',
+                whiteSpace: 'nowrap',
+                ...(node.isSelected && !node.isInternal && {
+                  color: 'primary.main'
+                }),
+              }}
+            >
+              {node.data.name}
+            </Box>
+          </ButtonBase>
+    );
+  }
 
   const handleSubmit = async (e: any) => {
     e.preventDefault()
@@ -170,62 +210,11 @@ export const DocSideNav = () => {
             <CardHeader title="Hierarchy" />
             <Divider />
             <CardContent>
-              <Stack
-                component="ul"
-                spacing={0.5}
-                sx={{
-                  listStyle: 'none',
-                  p: 0,
-                  m: 0,
-                }}
-              >
-                <TreeView
-                  aria-label="gmail"
-                  defaultExpanded={['3']}
-                  defaultCollapseIcon={<ArrowDropDownIcon />}
-                  defaultExpandIcon={<ArrowRightIcon />}
-                  defaultEndIcon={<div style={{ width: 24 }} />}
-                  sx={{ height: 264, flexGrow: 1, maxWidth: 400, overflowY: 'inherit' }}
-                >
-                  <StyledTreeItem 
-                  nodeId="1" 
-                  labelText="All Mail" 
-                  labelIcon={MailIcon} 
-                  labelInfo={
-                    (
-                      <Tooltip title="Add Document">
-                        <Button className='hierarchyButton' sx={{display: "none"}}>asd</Button>
-                      </Tooltip>
-                    
-                    )} />
-                  <StyledTreeItem nodeId="2" labelText="Trash" labelIcon={DeleteIcon}                   labelInfo={
-                    (
-                      <Tooltip title="Add Document">
-                        <Button className='hierarchyButton' sx={{display: "none"}}>asd</Button>
-                      </Tooltip>
-                    
-                    )} />
-                  <StyledTreeItem nodeId="3" labelText="Categories" labelIcon={Label} labelInfo={
-                    (
-                      <Tooltip title="Add Document">
-                        <Button className='hierarchyButton' sx={{display: "none"}}>asd</Button>
-                      </Tooltip>
-                    
-                    )}>
-                    <StyledTreeItem nodeId="5" labelText="Social" labelIcon={SupervisorAccountIcon} color="#1a73e8" bgColor="#e8f0fe" />
-                    <StyledTreeItem nodeId="6" labelText="Updates" labelIcon={InfoIcon} color="#e3742f" bgColor="#fcefe3" />
-                    <StyledTreeItem nodeId="7" labelText="Forums" labelIcon={ForumIcon} color="#a250f5" bgColor="#f3e8fd" />
-                    <StyledTreeItem nodeId="8" labelText="Promotions" labelIcon={LocalOfferIcon} color="#3c8039" bgColor="#e6f4ea" />
-                  </StyledTreeItem>
-                  <StyledTreeItem nodeId="4" labelText="History" labelIcon={Label} labelInfo={
-                    (
-                      <Tooltip title="Add Document">
-                        <Button className='hierarchyButton' sx={{display: "none"}}>asd</Button>
-                      </Tooltip>
-                    
-                    )}/>
-                </TreeView>
-              </Stack>
+
+                <Tree initialData={data} openByDefault={false} width={600} indent={24} rowHeight={36} overscanCount={1} paddingTop={30} paddingBottom={10} padding={25 /* sets both */}>
+                  {Node as any}
+                </Tree>
+
             </CardContent>
           </Card>
         </Box>

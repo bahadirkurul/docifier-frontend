@@ -1,5 +1,5 @@
 import { Box, Container, Unstable_Grid2 as Grid, Stack, SvgIcon, Typography } from '@mui/material'
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import { useAuthContext } from '../../contexts/auth-context'
 import { MainLayout } from '../../layouts/dashboard/layout'
 import { DocSideNav } from './sections/sideNav'
@@ -7,6 +7,7 @@ import { EditDoc } from './sections/editDoc'
 
 const DocSettings = () => {
   const auth = useAuthContext() as any
+  const [document, setDocument] = useState()
 
   useEffect(() => {
     const getDoc = async () => {
@@ -14,9 +15,9 @@ const DocSettings = () => {
       const id = queryParams.get('id')
   
       const docs = ((await auth.getDocs()) as any[]) || []
-      const isDocExist = docs.find((doc) => doc.docId === id)
+      const existDoc = docs.find((doc) => doc.docId === id)
   
-
+      setDocument(existDoc)
     }
 
     getDoc()
