@@ -1,4 +1,4 @@
-import { useCallback, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { useFormik } from "formik";
 import * as Yup from "yup";
 import {
@@ -42,6 +42,10 @@ const Login = () => {
       }
     },
   });
+
+  useEffect(() => {
+    document.title = 'Docifier - Login';
+  })
 
   return (
     <AuthLayout>

@@ -7,7 +7,7 @@ import { EditDoc } from './sections/editDoc'
 
 const DocSettings = () => {
   const auth = useAuthContext() as any
-  const [document, setDocument] = useState()
+  const [doc, setDocument] = useState()
 
   useEffect(() => {
     const getDoc = async () => {
@@ -17,6 +17,11 @@ const DocSettings = () => {
       const docs = ((await auth.getDocs()) as any[]) || []
       const existDoc = docs.find((doc) => doc.docId === id)
   
+      if (!existDoc) {
+        window.location.href = '/'
+      }
+
+      document.title = `Docifier - ${existDoc!.alias} - Overview`;
       setDocument(existDoc)
     }
 

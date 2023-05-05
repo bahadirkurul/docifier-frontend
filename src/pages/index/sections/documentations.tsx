@@ -57,7 +57,7 @@ export const OverviewLatestOrders = (props) => {
                         }
                         size="small"
                         variant="text"
-                        href={`/docs?id=${doc.docId}`}
+                        href={`/docs/overview?id=${doc.docId}`}
                       >
                         {doc.alias}
                       </Button>

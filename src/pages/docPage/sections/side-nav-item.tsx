@@ -3,6 +3,8 @@ import { Box, ButtonBase } from '@mui/material';
 
 export const DocSideNavItem = (props) => {
   const { active = false, disabled, external, icon, path, title } = props;
+  const queryParams = new URLSearchParams(window.location.search)
+  const sheetId = queryParams.get('sheet')
 
   const linkProps = path
     ? external

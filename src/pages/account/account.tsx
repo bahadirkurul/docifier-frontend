@@ -3,9 +3,14 @@ import { MainLayout } from "../../layouts/dashboard/layout";
 import { useAuthContext } from "../../contexts/auth-context";
 import { AccountProfile } from "./sections/profile";
 import { SettingsPassword } from "./sections/setPassword";
+import { useEffect } from "react";
 
 const Account = () => {
   const auth = useAuthContext() as any;
+
+  useEffect(() => {
+    document.title = 'Docifier - Account';
+  })
 
   return (
     <MainLayout>

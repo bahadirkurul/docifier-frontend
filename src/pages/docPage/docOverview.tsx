@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import { Box, Container, Unstable_Grid2 as Grid, Stack, SvgIcon, Typography } from '@mui/material'
 import { useEffect, useState } from 'react'
 import { useAuthContext } from '../../contexts/auth-context'
@@ -5,36 +6,33 @@ import { MainLayout } from '../../layouts/dashboard/layout'
 import { DocSideNav } from './sections/sideNav'
 import { EditDoc } from './sections/editDoc'
 
-const DocDetails = () => {
+const DocOverview = () => {
   const auth = useAuthContext() as any
-  const [docId, setDocId] = useState("")
-  const [docSheetId, setDocSheetId] = useState("")
+  const [doc, setDocument] = useState() as any
 
   useEffect(() => {
     const getDoc = async () => {
       const queryParams = new URLSearchParams(window.location.search)
       const id = queryParams.get('id')
-      const sheetId = queryParams.get('sheet')
 
-      if (!id || !sheetId) {
+      if (!id ) {
         window.location.href = '/'
       }
 
-      setDocId(id!)
-      setDocSheetId(sheetId!)
-      console.log(docId);
-      console.log(docSheetId);
       const docs = ((await auth.getDocs()) as any[]) || []
       const existDoc = docs.find((doc) => doc.docId === id)
-
+  
       if (!existDoc) {
         window.location.href = '/'
       }
 
-      document.title = `Docifier - ${existDoc!.alias}`;
+      document.title = `Docifier - ${existDoc!.alias} - Overview`;
+      setDocument(existDoc)
     }
 
     getDoc()
+
+    
   }, [])
 
   return (
@@ -47,10 +45,10 @@ const DocDetails = () => {
         }}
       >
         <Grid container spacing={5}>
-          <Grid xs={12} md={4} lg={3} xl={2}>
+          <Grid xs={12} md={4} lg={2}>
             <DocSideNav />
           </Grid>
-          <Grid xs={12} md={8} lg={9} xl={8}>
+          <Grid xs={12} md={8} lg={10}>
 
            <EditDoc/>
           </Grid>
@@ -60,4 +58,4 @@ const DocDetails = () => {
   )
 }
 
-export default DocDetails
+export default DocOverview

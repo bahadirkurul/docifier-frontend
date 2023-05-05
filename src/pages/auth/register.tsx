@@ -4,6 +4,7 @@ import { Box, Button, Link, Stack, TextField, Typography } from '@mui/material';
 import { AuthLayout } from '../../layouts/auth/layout';
 import { useAuthContext } from '../../contexts/auth-context';
 import { useNavigate } from 'react-router-dom';
+import { useEffect } from 'react';
 
 const Register = () => {
   const auth = useAuthContext() as any;
@@ -42,6 +43,10 @@ const Register = () => {
       }
     }
   });
+
+  useEffect(() => {
+    document.title = 'Docifier - Register';
+  })
 
   return (
     <AuthLayout>

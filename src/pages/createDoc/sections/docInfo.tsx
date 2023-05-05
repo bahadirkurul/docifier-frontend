@@ -19,7 +19,7 @@ export const CreateDocInfo = () => {
     e.preventDefault()
     const createdDoc = await auth.createDoc(test.current['value'])
 
-    window.location.href = `/docs?id=${createdDoc.docId}`
+    window.location.href = `/docs/overview?id=${createdDoc.docId}`
   }
 
   return (

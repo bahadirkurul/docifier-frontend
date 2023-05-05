@@ -2,9 +2,14 @@ import { Box, Container, Stack, Typography, Unstable_Grid2 as Grid } from "@mui/
 import { CreateDocInfo } from "./sections/docInfo";
 import { useAuthContext } from "../../contexts/auth-context";
 import { MainLayout } from "../../layouts/dashboard/layout";
+import { useEffect } from "react";
 
 const CreateDoc = () => {
   const auth = useAuthContext() as any;
+
+  useEffect(() => {
+    document.title = 'Docifier - Create Documentation';
+  })
 
   return (
     <MainLayout>

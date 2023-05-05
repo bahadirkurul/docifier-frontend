@@ -17,11 +17,11 @@ const Homepage = () => {
   }
 
   useEffect(() => {
+    document.title = 'Docifier - Homepage';
     getDocs()
   }, [])
 
   return <MainLayout>
-
     <Box
       component="main"
       sx={{

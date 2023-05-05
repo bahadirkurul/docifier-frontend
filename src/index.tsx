@@ -1,18 +1,10 @@
-import React, { useEffect, useState } from 'react'
+import React, {  } from 'react'
 import ReactDOM from 'react-dom/client'
 import reportWebVitals from './reportWebVitals'
-import { BrowserRouter as Router, Route, Routes, BrowserRouter, Navigate, useLocation } from 'react-router-dom'
+import { Route, Routes, BrowserRouter } from 'react-router-dom'
 import { ThemeProvider } from '@mui/material/styles'
 import { AuthProvider } from './contexts/auth-context'
-import Homepage from './pages/index/Homepage'
-import { AuthGuard } from './guards/auth-guard'
-import Login from './pages/auth/login'
 import { createTheme } from './theme'
-import Register from './pages/auth/register'
-import NotFound from './pages/NotFound'
-import CreateDoc from './pages/createDoc/CreateDoc'
-import Account from './pages/account/account'
-import DocDetails from './pages/docPage/docPage'
 import { routes } from './routes'
 
 const root = ReactDOM.createRoot(document.getElementById('root') as HTMLElement)
@@ -24,21 +16,15 @@ root.render(
     <ThemeProvider theme={theme}>
       <BrowserRouter>
         <AuthProvider>
-          <Routes>
-          {
-            routes.map((route, index) => (
-              <Route
-                key={index}
-                path={route.path}
-                element={route.element}
-              />
-            ))
-          }
-          </Routes>
+            <Routes>
+              {routes.map((route, index) => (
+                <Route key={index} path={route.path} element={route.element} />
+              ))}
+            </Routes>
         </AuthProvider>
       </BrowserRouter>
     </ThemeProvider>
-  </React.StrictMode>
+  </React.StrictMode>,
 )
 
 // If you want to start measuring performance in your app, pass a function
