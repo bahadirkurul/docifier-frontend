@@ -50,9 +50,9 @@ const DocDetails = () => {
           <Grid xs={12} md={4} lg={3} xl={2}>
             <DocSideNav />
           </Grid>
-          <Grid xs={12} md={8} lg={9} xl={8}>
+          <Grid xs={12} md={8} lg={9} xl={10}>
 
-           <EditDoc/>
+           <EditDoc docId={docId} sheetId={docSheetId}/>
           </Grid>
         </Grid>
       </Box>

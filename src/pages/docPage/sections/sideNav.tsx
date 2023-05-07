@@ -87,16 +87,19 @@ export const DocSideNav = () => {
     /* This node instance can do many things. See the API reference. */
     const queryParams = new URLSearchParams(window.location.search)
     const id = queryParams.get('id')
+    const sheetId = queryParams.get('sheet')
+    console.log(node.data.id, id);
+    
 
     return (
       <ButtonBase
         style={style}
         ref={dragHandle}
         onClick={() => {
-          if (node.isLeaf) {
-            navigate(`/docs?id=${id}&sheet=${node.data.id}`)
-          }
           node.toggle()
+          if (node.isLeaf) {
+            window.location.href = `/docs?id=${id}&sheet=${node.data.id}`
+          }
         }}
         sx={{
           alignItems: 'center',
@@ -108,7 +111,7 @@ export const DocSideNav = () => {
           py: '6px',
           textAlign: 'left',
           width: '100%',
-          ...(node.isSelected && {
+          ...((node.isSelected || node.data.id === sheetId) && {
             backgroundColor: 'rgba(255, 255, 255, 0.04)',
           }),
           '&:hover': {
@@ -124,7 +127,7 @@ export const DocSideNav = () => {
             display: 'inline-flex',
             justifyContent: 'center',
             mr: 2,
-            ...(node.isSelected &&
+            ...((node.isSelected || node.data.id === sheetId) &&
               !node.isInternal && {
                 color: 'primary.main',
               }),
@@ -144,7 +147,7 @@ export const DocSideNav = () => {
             fontWeight: 600,
             lineHeight: '24px',
             whiteSpace: 'nowrap',
-            ...(node.isSelected &&
+            ...((node.isSelected || node.data.id === sheetId)   &&
               !node.isInternal && {
                 color: 'primary.main',
               }),
@@ -217,9 +220,9 @@ export const DocSideNav = () => {
           }}
         >
           <Card>
-            <CardHeader title="Hierarchy" />
+            <CardHeader title="Document Tree" />
             <Divider />
-            <CardContent>
+            <CardContent sx={{py: 0}}>
                   <Tree initialData={data} openByDefault={false} width={275} height={600}  indent={24} rowHeight={36} overscanCount={1} paddingTop={30} paddingBottom={10} padding={25 /* sets both */}>
                     {Node as any}
                   </Tree>
