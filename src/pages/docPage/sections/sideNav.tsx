@@ -71,25 +71,50 @@ const data = [
     children: [
       { id: 'd1', name: 'Alice' },
       { id: 'd2', name: 'Bob' },
-      { id: 'd3', name: 'Charlie' },
+      { id: 'd3', name: 'Charlie', children: [] },
     ],
   },
 ]
 
 export const DocSideNav = () => {
-  const test = useRef('')
   const auth = useAuthContext() as any
   const location = useLocation()
-  const navigate = useNavigate();
+  const [docTree, setDocTree] = useState() as any
 
+  const convertDocTreeItemToData = (docTreeItem) => {
+    const { itemId, name, children, itemType } = docTreeItem
+    const data = {
+      id: itemId,
+      name,
+    } as any
+
+    if (children && children.length > 0) {
+      data.children = children.map(convertDocTreeItemToData)
+    }
+    
+    return data
+  }
+
+  useEffect(() => {
+    async function getDocTree() {
+      const queryParams = new URLSearchParams(window.location.search)
+      const id = queryParams.get('id')
+
+      const docTreeRes = (await auth.getDocTree(id))
+      console.log(docTreeRes);
+      
+      setDocTree(docTreeRes.tree.map(convertDocTreeItemToData)) 
+    }
+
+    getDocTree()
+  }, [])
 
   function Node({ node, style, dragHandle }) {
     /* This node instance can do many things. See the API reference. */
     const queryParams = new URLSearchParams(window.location.search)
     const id = queryParams.get('id')
     const sheetId = queryParams.get('sheet')
-    console.log(node.data.id, id);
-    
+    console.log(node.data.id, id)
 
     return (
       <ButtonBase
@@ -147,7 +172,7 @@ export const DocSideNav = () => {
             fontWeight: 600,
             lineHeight: '24px',
             whiteSpace: 'nowrap',
-            ...((node.isSelected || node.data.id === sheetId)   &&
+            ...((node.isSelected || node.data.id === sheetId) &&
               !node.isInternal && {
                 color: 'primary.main',
               }),
@@ -222,10 +247,10 @@ export const DocSideNav = () => {
           <Card>
             <CardHeader title="Document Tree" />
             <Divider />
-            <CardContent sx={{py: 0}}>
-                  <Tree initialData={data} openByDefault={false} width={275} height={600}  indent={24} rowHeight={36} overscanCount={1} paddingTop={30} paddingBottom={10} padding={25 /* sets both */}>
-                    {Node as any}
-                  </Tree>
+            <CardContent sx={{ py: 0 }}>
+              <Tree initialData={docTree} openByDefault={false} width={275} height={600} indent={24} rowHeight={36} overscanCount={1} paddingTop={30} paddingBottom={10} padding={25 /* sets both */}>
+                {Node as any}
+              </Tree>
             </CardContent>
           </Card>
         </Box>

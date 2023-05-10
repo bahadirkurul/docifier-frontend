@@ -2,6 +2,7 @@ import { createContext, useContext, useEffect, useReducer, useRef } from "react"
 import PropTypes from "prop-types";
 import { loginRequest, logoutRequest } from "../api/auth";
 import { createDocumentation, deleteDocumentation, getDocsRequest } from "../api/documentation";
+import { getDocumentationTreeReq } from "../api/docTree";
 
 const HANDLERS = {
   INITIALIZE: "INITIALIZE",
@@ -180,6 +181,16 @@ export const AuthProvider = (props) => {
     return request.data;
   };
 
+  const getDocTree = async (docId: string) => {
+    const request = await getDocumentationTreeReq({ accessToken: state.session.accessToken, docId });
+
+    if (request.success === false) {
+      console.log(request.error.message);
+    }
+    
+    return request.data;
+  };
+
   return (
     <AuthContext.Provider
       value={{
@@ -190,7 +201,8 @@ export const AuthProvider = (props) => {
 
         getDocs,
         createDoc,
-        deleteDoc
+        deleteDoc,
+        getDocTree
       }}
     >
       {children}

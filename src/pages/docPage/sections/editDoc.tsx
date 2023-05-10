@@ -4,17 +4,17 @@ import { useAuthContext } from '../../../contexts/auth-context'
 import { useLocation } from 'react-router-dom'
 import { TabContext, TabList, TabPanel } from '@mui/lab'
 import React from 'react'
-import SimpleMDE from "easymde";
-import "easymde/dist/easymde.min.css";
+import SimpleMDE from 'easymde'
+import 'easymde/dist/easymde.min.css'
 import SimpleMdeReact from 'react-simplemde-editor'
 import ReactMarkdown from 'react-markdown'
-import ReactDOMServer from "react-dom/server";
+import ReactDOMServer from 'react-dom/server'
 import remarkGfm from 'remark-gfm'
-import remarkCodeTitles from "remark-flexible-code-titles";
-import {Prism as SyntaxHighlighter} from 'react-syntax-highlighter'
-import {atomDark} from 'react-syntax-highlighter/dist/esm/styles/prism'
+import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter'
+import { atomDark } from 'react-syntax-highlighter/dist/esm/styles/prism'
 
-export const EditDoc = ({docId, sheetId}) => {
+
+export const EditDoc = ({ docId, sheetId }) => {
   const test = useRef('')
   const auth = useAuthContext() as any
   const location = useLocation()
@@ -27,15 +27,13 @@ export const EditDoc = ({docId, sheetId}) => {
 
   const MyMDE = () => {
     const delay = 1000
-    let mdValue = localStorage.getItem(`smde_${docId}_${sheetId}`) || "Initial value";
-    console.log(mdValue);
-    
+    let mdValue = localStorage.getItem(`smde_${docId}_${sheetId}`) || 'Initial value'
+
     const onChange = useCallback((value: string) => {
       mdValue = value
-    }, []);
-    
+    }, [])
+
     const options = useMemo(() => {
-      
       return {
         autofocus: false,
         spellChecker: false,
@@ -45,52 +43,42 @@ export const EditDoc = ({docId, sheetId}) => {
           uniqueId: `${docId}_${sheetId}`,
           delay,
         },
+        toolbar: ['bold','italic', 'heading', '|','quote','unordered-list','ordered-list', '|', 'link','image', '|', 'code', 'table' , '|', 'preview', 'side-by-side', '|', 'guide'],
+        tabSize: 4,
+        sideBySideFullscreen: false,
+        showIcons: ["code", "table"],
+        syncSideBySidePreviewScroll: true,
         previewRender() {
           return ReactDOMServer.renderToString(
             <ReactMarkdown
-              remarkPlugins={[remarkGfm, remarkCodeTitles,]}
+              remarkPlugins={[remarkGfm]}
               children={mdValue}
               components={{
-                code({node, inline, className, children, ...props}) {
+                code({ node, inline, className, children, ...props }) {
                   const match = /language-(\w+)/.exec(className || '')
-                  console.log(children);
-                  
+
                   return !inline && match ? (
-                    <SyntaxHighlighter
-                      {...props}
-                      children={String(children).replace(/\n$/, '')}
-                      style={atomDark}
-                      language={match[1]}
-                      PreTag="div"
-                      showLineNumbers={true}
-                    />
+                    <SyntaxHighlighter {...props} children={String(children).replace(/\n$/, '')} style={atomDark} language={match[1]} PreTag="div" showLineNumbers={true} />
                   ) : (
                     <code {...props} className={className}>
                       {children}
                     </code>
                   )
-                }
+                },
               }}
-            />
-          );
+            />,
+          )
         },
-      } as SimpleMDE.Options;
-    }, [mdValue, delay]);
+      } as SimpleMDE.Options
+    }, [mdValue, delay])
 
     useEffect(() => {
-      const startValue = localStorage.getItem(`smde_${docId}_${sheetId}`) || "Initial value";
+      const startValue = localStorage.getItem(`smde_${docId}_${sheetId}`) || 'Initial value'
       mdValue = startValue
     }, [])
-  
-    return (
-      <SimpleMdeReact
-        options={options}
-        value={mdValue}
-        onChange={onChange}
-      />
-    );
-  };
-  
+
+    return <SimpleMdeReact options={options} value={mdValue} onChange={onChange} />
+  }
 
   return (
     <Card>
@@ -101,19 +89,10 @@ export const EditDoc = ({docId, sheetId}) => {
             <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
               <TabList onChange={handleChange} aria-label="lab API tabs example">
                 <Tab label="Document" value="1" />
-                <Tab label="Test API" value="2" />
-                <Tab label="Settings" value="3" />
               </TabList>
             </Box>
             <TabPanel value="1">
-            	<MyMDE/>
-
-            </TabPanel>
-            <TabPanel value="2">
-              Test API
-            </TabPanel>
-            <TabPanel value="3">
-              Settings
+              <MyMDE />
             </TabPanel>
           </TabContext>
         </Box>
