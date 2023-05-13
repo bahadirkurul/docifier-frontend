@@ -43,11 +43,16 @@ const DocDetails = () => {
         component="main"
         sx={{
           flexGrow: 1,
-          py: 8,
+          py: 2,
         }}
       >
         <Grid container spacing={5}>
-          <Grid xs={12} md={4} lg={3} xl={2}>
+          <Grid xs={12} md={4} lg={3} xl={2} 
+          sx={{
+            position: 'sticky',
+          }}
+          >
+
             <DocSideNav />
           </Grid>
           <Grid xs={12} md={8} lg={9} xl={10}>

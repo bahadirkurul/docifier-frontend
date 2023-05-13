@@ -187,6 +187,8 @@ export const DocSideNav = () => {
   return (
     <Scrollbar
       sx={{
+        position: "sticky",
+        top: "1.5rem",
         '& .simplebar-content': {
           height: '100%',
         },
@@ -206,7 +208,8 @@ export const DocSideNav = () => {
           sx={{
             flexGrow: 1,
             px: 2,
-            py: 3,
+            py: 0.08,
+            paddingBottom: 3,
           }}
         >
           <Card>
