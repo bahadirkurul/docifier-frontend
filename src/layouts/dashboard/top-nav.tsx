@@ -80,7 +80,7 @@ export const TopNav = (props) => {
                 width: 40,
                 backgroundColor: "#3f51b5",
               }}
-            > SK </Avatar>
+            > BK </Avatar>
           </Stack>
         </Stack>
       </Box>

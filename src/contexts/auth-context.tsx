@@ -3,6 +3,7 @@ import PropTypes from "prop-types";
 import { loginRequest, logoutRequest } from "../api/auth";
 import { createDocumentation, deleteDocumentation, getDocsRequest } from "../api/documentation";
 import { getDocumentationTreeReq } from "../api/docTree";
+import { getDocumentationSheetReq, saveDocumentationSheetReq } from "../api/docSheet";
 
 const HANDLERS = {
   INITIALIZE: "INITIALIZE",
@@ -191,6 +192,26 @@ export const AuthProvider = (props) => {
     return request.data;
   };
 
+  const getDocSheet = async (docId: string, sheetId: string) => {
+    const request = await getDocumentationSheetReq({ docId, sheetId, accessToken: state.session.accessToken });
+
+    if (request.success === false) {
+      console.log(request.error.message);
+    }
+    
+    return request.data;
+  };
+
+  const saveDocSheet = async (docId: string, sheetId: string, data: string) => {
+    const request = await saveDocumentationSheetReq({ docId, sheetId, data, accessToken: state.session.accessToken });
+
+    if (request.success === false) {
+      console.log(request.error.message);
+    }
+    
+    return request.data;
+  };
+
   return (
     <AuthContext.Provider
       value={{
@@ -202,7 +223,11 @@ export const AuthProvider = (props) => {
         getDocs,
         createDoc,
         deleteDoc,
-        getDocTree
+
+        getDocTree,
+
+        getDocSheet,
+        saveDocSheet,
       }}
     >
       {children}

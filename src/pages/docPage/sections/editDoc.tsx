@@ -1,84 +1,49 @@
-import { useCallback, useEffect, useMemo, useRef } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { Box, Button, Card, CardActions, CardHeader, Divider, Tab } from '@mui/material'
 import { useAuthContext } from '../../../contexts/auth-context'
 import { useLocation } from 'react-router-dom'
 import { TabContext, TabList, TabPanel } from '@mui/lab'
 import React from 'react'
-import SimpleMDE from 'easymde'
 import 'easymde/dist/easymde.min.css'
-import SimpleMdeReact from 'react-simplemde-editor'
-import ReactMarkdown from 'react-markdown'
-import ReactDOMServer from 'react-dom/server'
-import remarkGfm from 'remark-gfm'
-import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter'
-import { atomDark } from 'react-syntax-highlighter/dist/esm/styles/prism'
 
+import { CKEditor } from '@ckeditor/ckeditor5-react'
+import Editor from 'ckeditor5-custom-build-goodmantr194'
+import 'prismjs/themes/prism.css'
+import Prism from 'prismjs'
 
 export const EditDoc = ({ docId, sheetId }) => {
-  const test = useRef('')
   const auth = useAuthContext() as any
-  const location = useLocation()
-
+  const [editorData, setEditorData] = useState("")
   const [value, setValue] = React.useState('1')
 
   const handleChange = (event: React.SyntheticEvent, newValue: string) => {
     setValue(newValue)
   }
 
-  const MyMDE = () => {
-    const delay = 1000
-    let mdValue = localStorage.getItem(`smde_${docId}_${sheetId}`) || 'Initial value'
-
-    const onChange = useCallback((value: string) => {
-      mdValue = value
-    }, [])
-
-    const options = useMemo(() => {
-      return {
-        autofocus: false,
-        spellChecker: false,
-        inputStyle: 'contenteditable',
-        autosave: {
-          enabled: true,
-          uniqueId: `${docId}_${sheetId}`,
-          delay,
-        },
-        toolbar: ['bold','italic', 'heading', '|','quote','unordered-list','ordered-list', '|', 'link','image', '|', 'code', 'table' , '|', 'preview', 'side-by-side', '|', 'guide'],
-        tabSize: 4,
-        sideBySideFullscreen: false,
-        showIcons: ["code", "table"],
-        syncSideBySidePreviewScroll: true,
-        previewRender() {
-          return ReactDOMServer.renderToString(
-            <ReactMarkdown
-              remarkPlugins={[remarkGfm]}
-              children={mdValue}
-              components={{
-                code({ node, inline, className, children, ...props }) {
-                  const match = /language-(\w+)/.exec(className || '')
-
-                  return !inline && match ? (
-                    <SyntaxHighlighter {...props} children={String(children).replace(/\n$/, '')} style={atomDark} language={match[1]} PreTag="div" showLineNumbers={true} />
-                  ) : (
-                    <code {...props} className={className}>
-                      {children}
-                    </code>
-                  )
-                },
-              }}
-            />,
-          )
-        },
-      } as SimpleMDE.Options
-    }, [mdValue, delay])
-
-    useEffect(() => {
-      const startValue = localStorage.getItem(`smde_${docId}_${sheetId}`) || 'Initial value'
-      mdValue = startValue
-    }, [])
-
-    return <SimpleMdeReact options={options} value={mdValue} onChange={onChange} />
+  const handleEditorChange = (event, editor) => {
+    console.log((editor as any).getData())
+    setEditorData((editor as any).getData())
   }
+
+  const handleSave = async (e) => {
+    await auth.saveDocSheet(docId, sheetId, editorData)
+  }
+
+  const editorConfiguration = {
+    placeholder: 'Type the content here!',
+  }
+
+  useEffect(() => {
+    const queryParams = new URLSearchParams(window.location.search);
+    const docId = queryParams.get('id');
+    const sheetId = queryParams.get('sheet');
+
+    const getDocSheetEffect = async () => {
+      const data = await auth.getDocSheet(docId, sheetId)
+      setEditorData(data.data || "")
+    }
+    getDocSheetEffect()
+  }, [])
 
   return (
     <Card>
@@ -92,15 +57,30 @@ export const EditDoc = ({ docId, sheetId }) => {
               </TabList>
             </Box>
             <TabPanel value="1">
-              <MyMDE />
+              <CKEditor
+                editor={Editor}
+                config={editorConfiguration}
+                data={editorData}
+                onChange={handleEditorChange}
+                onReady={(editor) => {
+                  // You can store the "editor" and use when it is needed.
+                  console.log('Editor is ready to use!', editor)
+                }}
+                onBlur={(event, editor) => {
+                  console.log('Blur.', editor)
+                }}
+                onFocus={(event, editor) => {
+                  console.log('Focus.', editor)
+                }}
+              />
             </TabPanel>
           </TabContext>
         </Box>
       </CardActions>
       <Divider />
       <CardActions sx={{ justifyContent: 'flex-end' }}>
-        <Button variant="contained" type="submit">
-          Create
+        <Button variant="contained" type="submit" onClick={handleSave}>
+          Save
         </Button>
       </CardActions>
     </Card>
