@@ -1,7 +1,6 @@
 import { Box, Container, Unstable_Grid2 as Grid, Stack, SvgIcon, Typography } from '@mui/material'
 import { useEffect, useState } from 'react'
-import { useAuthContext } from '../../contexts/auth-context'
-import { MainLayout } from '../../layouts/dashboard/layout'
+import { useAuthContext } from '../../contexts/AuthContext'
 import { DocSideNav } from './sections/sideNav'
 import { EditDoc } from './sections/editDoc'
 
@@ -38,7 +37,6 @@ const DocDetails = () => {
   }, [])
 
   return (
-    <MainLayout>
       <Box
         component="main"
         sx={{
@@ -61,7 +59,6 @@ const DocDetails = () => {
           </Grid>
         </Grid>
       </Box>
-    </MainLayout>
   )
 }
 

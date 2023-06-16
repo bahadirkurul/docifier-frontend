@@ -10,7 +10,7 @@ import {
 // Used only to create transitions
 const muiTheme = createTheme();
 
-export function createComponents(config) {
+export function createLightComponents(config) {
   const { palette } = config;
 
   return {

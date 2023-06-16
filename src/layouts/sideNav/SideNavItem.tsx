@@ -1,5 +1,6 @@
 import PropTypes from 'prop-types';
 import { Box, ButtonBase } from '@mui/material';
+import { Link } from 'react-router-dom';
 
 export const SideNavItem = (props) => {
   const { active = false, disabled, external, icon, path, title } = props;
@@ -7,12 +8,13 @@ export const SideNavItem = (props) => {
   const linkProps = path
     ? external
       ? {
-        component: 'a',
-        href: path,
+        component: Link,
+        to: path,
         target: '_blank'
       }
       : {
-        href: path
+        component: Link,
+        to: path
       }
     : {};
 
@@ -34,8 +36,9 @@ export const SideNavItem = (props) => {
           }),
           '&:hover': {
             backgroundColor: 'rgba(255, 255, 255, 0.04)'
-          }
+          },
         }}
+        disableRipple
         {...linkProps}
       >
         {icon && (

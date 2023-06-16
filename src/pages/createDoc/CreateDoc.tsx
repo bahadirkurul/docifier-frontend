@@ -1,7 +1,6 @@
 import { Box, Container, Stack, Typography, Unstable_Grid2 as Grid } from "@mui/material";
 import { CreateDocInfo } from "./sections/docInfo";
-import { useAuthContext } from "../../contexts/auth-context";
-import { MainLayout } from "../../layouts/dashboard/layout";
+import { useAuthContext } from "../../contexts/AuthContext";
 import { useEffect } from "react";
 
 const CreateDoc = () => {
@@ -12,7 +11,6 @@ const CreateDoc = () => {
   })
 
   return (
-    <MainLayout>
       <Box
         component="main"
         sx={{
@@ -32,7 +30,6 @@ const CreateDoc = () => {
           </Stack>
         </Container>
       </Box>
-    </MainLayout>
   );
 };
 

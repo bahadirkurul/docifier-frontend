@@ -1,4 +1,6 @@
-export const createShadows = () => {
+import { Shadows } from "@mui/material";
+
+export const createDarkShadows = () => {
   return [
     'none',
     '0px 1px 2px rgba(0, 0, 0, 0.08)',
@@ -25,5 +27,5 @@ export const createShadows = () => {
     '0px 8px 42px rgba(0, 0, 0, 0.08)',
     '0px 9px 44px rgba(0, 0, 0, 0.08)',
     '0px 9px 46px rgba(0, 0, 0, 0.08)'
-  ];
+  ] as Shadows;
 };

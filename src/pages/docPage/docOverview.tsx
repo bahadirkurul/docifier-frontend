@@ -1,8 +1,7 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import { Box, Container, Unstable_Grid2 as Grid, Stack, SvgIcon, Typography } from '@mui/material'
 import { useEffect, useState } from 'react'
-import { useAuthContext } from '../../contexts/auth-context'
-import { MainLayout } from '../../layouts/dashboard/layout'
+import { useAuthContext } from '../../contexts/AuthContext'
 import { DocSideNav } from './sections/sideNav'
 import { EditDoc } from './sections/editDoc'
 
@@ -36,7 +35,6 @@ const DocOverview = () => {
   }, [])
 
   return (
-    <MainLayout>
       <Box
         component="main"
         sx={{
@@ -53,7 +51,6 @@ const DocOverview = () => {
           </Grid>
         </Grid>
       </Box>
-    </MainLayout>
   )
 }
 

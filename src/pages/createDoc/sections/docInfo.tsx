@@ -9,7 +9,7 @@ import {
   Stack,
   TextField
 } from '@mui/material';
-import { useAuthContext } from '../../../contexts/auth-context';
+import { useAuthContext } from '../../../contexts/AuthContext';
 
 export const CreateDocInfo = () => {
   const test = useRef("")

@@ -14,10 +14,11 @@ import {
   TableBody,
   TableCell,
   TableHead,
-  TableRow
+  TableRow,
+  Typography
 } from '@mui/material';
 import { Scrollbar } from '../../../components/scrollbar';
-import { useAuthContext } from '../../../contexts/auth-context';
+import { useAuthContext } from '../../../contexts/AuthContext';
 
 export const OverviewLatestOrders = (props) => {
   const { docs = [], sx } = props;
@@ -83,7 +84,7 @@ export const OverviewLatestOrders = (props) => {
                   </TableRow>
                 )
               })}
-              {docs.length === 0 && <>You dont have any documentations yet.</>}
+              {docs.length === 0 && <Typography>You dont have any documentations yet.</Typography>}
             </TableBody>
           </Table>
         </Box>

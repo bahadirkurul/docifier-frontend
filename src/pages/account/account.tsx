@@ -1,6 +1,5 @@
 import { Box, Container, Stack, Typography, Unstable_Grid2 as Grid } from "@mui/material";
-import { MainLayout } from "../../layouts/dashboard/layout";
-import { useAuthContext } from "../../contexts/auth-context";
+import { useAuthContext } from "../../contexts/AuthContext";
 import { AccountProfile } from "./sections/profile";
 import { SettingsPassword } from "./sections/setPassword";
 import { useEffect } from "react";
@@ -13,7 +12,6 @@ const Account = () => {
   })
 
   return (
-    <MainLayout>
       <Box
         component="main"
         sx={{
@@ -36,7 +34,6 @@ const Account = () => {
           </Stack>
         </Container>
       </Box>
-    </MainLayout>
   );
 };
 

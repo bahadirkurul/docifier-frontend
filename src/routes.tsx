@@ -9,31 +9,34 @@ import DocDetails from "./pages/docPage/docPage";
 import DocSettings from "./pages/docPage/docSettings";
 import Homepage from "./pages/index/Homepage";
 
-export const routes = [
+export const privateRoutes = [
   {
     path: '/',
-    element: <AuthGuard><Homepage /></AuthGuard>,
+    element: <Homepage />,
   },
   {
     path: '/createDoc',
-    element: <AuthGuard><CreateDoc /></AuthGuard> ,
+    element: <CreateDoc />,
   },
   {
     path: '/account',
-    element: <AuthGuard><Account /></AuthGuard>,
+    element: <Account />,
   },
   {
     path: '/docs',
-    element: <AuthGuard><DocDetails /></AuthGuard>,
+    element: <DocDetails />,
   },
   {
     path: '/docs/settings',
-    element: <AuthGuard><DocSettings /></AuthGuard>,
+    element: <DocSettings />,
   },
   {
     path: '/docs/overview',
-    element: <AuthGuard><DocOverview /></AuthGuard>,
+    element: <DocOverview />,
   },
+]
+
+export const publicRoutes = [
   {
     path: '/auth/login',
     element: <Login />,
@@ -42,7 +45,7 @@ export const routes = [
     path: '/auth/register',
     element: <Register />,
   },
-    {
+  {
     path: '*',
     element: <NotFound />,
   },

@@ -1,10 +1,12 @@
-export const createTypography = () => {
+export const createLightTypography = (config) => {
+  const { palette } = config;
+
   return {
     fontFamily: '"Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji"',
     body1: {
       fontSize: '1rem',
       fontWeight: 400,
-      lineHeight: 1.5
+      lineHeight: 1.5,
     },
     body2: {
       fontSize: '0.875rem',
@@ -40,37 +42,43 @@ export const createTypography = () => {
       fontFamily: '\'Plus Jakarta Sans\', sans-serif',
       fontWeight: 700,
       fontSize: '3.5rem',
-      lineHeight: 1.2
+      lineHeight: 1.2,
+      color: palette.text.primary
     },
     h2: {
       fontFamily: '\'Plus Jakarta Sans\', sans-serif',
       fontWeight: 700,
       fontSize: '3rem',
-      lineHeight: 1.2
+      lineHeight: 1.2,
+      color: palette.text.primary
     },
     h3: {
       fontFamily: '\'Plus Jakarta Sans\', sans-serif',
       fontWeight: 700,
       fontSize: '2.25rem',
-      lineHeight: 1.2
+      lineHeight: 1.2,
+      color: palette.text.primary
     },
     h4: {
       fontFamily: '\'Plus Jakarta Sans\', sans-serif',
       fontWeight: 700,
       fontSize: '2rem',
-      lineHeight: 1.2
+      lineHeight: 1.2,
+      color: palette.text.primary
     },
     h5: {
       fontFamily: '\'Plus Jakarta Sans\', sans-serif',
       fontWeight: 700,
       fontSize: '1.5rem',
-      lineHeight: 1.2
+      lineHeight: 1.2,
+      color: palette.text.primary
     },
     h6: {
       fontFamily: '\'Plus Jakarta Sans\', sans-serif',
       fontWeight: 700,
       fontSize: '1.125rem',
-      lineHeight: 1.2
+      lineHeight: 1.2,
+      color: palette.text.primary
     }
   };
 };

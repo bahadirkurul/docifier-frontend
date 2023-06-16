@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from 'react'
 import { Box, ButtonBase, Card, CardContent, CardHeader, Divider, Stack } from '@mui/material'
-import { useAuthContext } from '../../../contexts/auth-context'
+import { useAuthContext } from '../../../contexts/AuthContext'
 import { Scrollbar } from '../../../components/scrollbar'
 import { useLocation, useNavigate } from 'react-router-dom'
 import { DocSideNavItem } from './side-nav-item'

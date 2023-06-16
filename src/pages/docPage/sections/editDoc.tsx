@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from 'react'
 import { Box, Button, Card, CardActions, CardHeader, Divider, Tab } from '@mui/material'
-import { useAuthContext } from '../../../contexts/auth-context'
+import { useAuthContext } from '../../../contexts/AuthContext'
 import { useLocation } from 'react-router-dom'
 import { TabContext, TabList, TabPanel } from '@mui/lab'
 import React from 'react'
