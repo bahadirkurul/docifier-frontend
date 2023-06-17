@@ -7,6 +7,9 @@ import { AccountPopover } from './account-popover'
 import { Logo } from '../../components/logo'
 import DarkModeIcon from '@mui/icons-material/DarkMode';
 import LightModeIcon from '@mui/icons-material/LightMode';
+import { useEffect, useState } from 'react'
+import { RetterTokenPayload } from '@retter/sdk'
+import { useRioSdkContext } from '../../contexts/RioSdkContext'
 
 const TOP_NAV_HEIGHT = 34
 
@@ -15,6 +18,29 @@ export const Header = (props) => {
   const lgUp = useMediaQuery((theme: any) => theme.breakpoints.up('lg'))
   const accountPopover = usePopover()
   const { mode, toggleColorMode } = useThemeContext()
+  const [user, setUser] = useState<RetterTokenPayload>()
+  const { rioSDK } = useRioSdkContext()
+  
+  useEffect(() => {
+    const getUser = async () => {
+      const user = await rioSDK.getCurrentUser()
+      setUser(user)
+    }
+    getUser()
+  }, [rioSDK])
+
+  function getInitials(firstName = "", lastName= "") {
+    // Extract the first character of the first name
+    const firstInitial = firstName.charAt(0);
+  
+    // Extract the first character of the last name
+    const lastInitial = lastName.charAt(0);
+  
+    // Concatenate the initials together
+    const initials = `${firstInitial}${lastInitial}`;
+  
+    return initials;
+  }
 
   return (
     <>
@@ -72,7 +98,7 @@ export const Header = (props) => {
                 backgroundColor: '#3f51b5',
               }}
             >
-              BK
+              {getInitials(user?.claims?.name, user?.claims?.surname)}
             </Avatar>
           </Stack>
         </Stack>

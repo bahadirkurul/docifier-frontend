@@ -1,4 +1,4 @@
-import { useCallback, useRef, useState } from 'react';
+import { useRef } from 'react';
 import {
   Button,
   Card,
@@ -9,17 +9,20 @@ import {
   Stack,
   TextField
 } from '@mui/material';
-import { useAuthContext } from '../../../contexts/AuthContext';
+import { createDocumentation } from '../../../api/documentation';
+import { useRioSdkContext } from '../../../contexts/RioSdkContext';
 
 export const CreateDocInfo = () => {
-  const test = useRef("")
-  const auth = useAuthContext() as any;
+  const alias = useRef("")
+  const { rioSDK } = useRioSdkContext() as any;
 
   const handleSubmit = async (e: any) => {
     e.preventDefault()
-    const createdDoc = await auth.createDoc(test.current['value'])
+    await createDocumentation(rioSDK, { 
+      alias: alias.current['value'],
+    })
 
-    window.location.href = `/docs/overview?id=${createdDoc.docId}`
+    // window.location.href = `/docs/overview?id=${createdDoc.docId}`
   }
 
   return (
@@ -39,7 +42,7 @@ export const CreateDocInfo = () => {
               fullWidth
               label="Title"
               name="title"
-              inputRef={test}
+              inputRef={alias}
               type="text"
             />
           </Stack>

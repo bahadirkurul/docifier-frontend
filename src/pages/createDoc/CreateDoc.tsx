@@ -4,11 +4,9 @@ import { useAuthContext } from "../../contexts/AuthContext";
 import { useEffect } from "react";
 
 const CreateDoc = () => {
-  const auth = useAuthContext() as any;
-
   useEffect(() => {
     document.title = 'Docifier - Create Documentation';
-  })
+  }, [])
 
   return (
       <Box

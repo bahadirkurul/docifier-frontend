@@ -12,12 +12,22 @@ import { Scrollbar } from "../../components/scrollbar";
 import { SideNavItem } from "./SideNavItem";
 import { useLocation } from "react-router-dom";
 import { documentations, userTabs } from "./config";
+import { useEffect, useState } from "react";
+import { useUserContext } from "../../contexts/UserContext";
 
 export const SideNavigation = (props) => {
   const { open, onClose } = props;
   const lgUp = useMediaQuery((theme: any) => theme.breakpoints.up("lg"));
   const location = useLocation();
-  const docs = []
+  const { detail } = useUserContext()
+  const [docs, setDocs] = useState([])
+
+  useEffect(() => {
+    document.title = "Docifier - Homepage";
+    if (detail) {
+      setDocs(detail.documentations)
+    }
+  }, [detail]);
 
   const content = (
     <Scrollbar

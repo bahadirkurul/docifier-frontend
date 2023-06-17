@@ -19,11 +19,13 @@ import {
 } from '@mui/material';
 import { Scrollbar } from '../../../components/scrollbar';
 import { useAuthContext } from '../../../contexts/AuthContext';
+import { useNavigate } from 'react-router-dom';
 
 export const OverviewLatestOrders = (props) => {
   const { docs = [], sx } = props;
   const auth = useAuthContext() as any;
-  
+  const navigate = useNavigate();
+
   const handleSubmit = async (docId: string) => {
     await auth.deleteDoc(docId)
 
@@ -47,7 +49,7 @@ export const OverviewLatestOrders = (props) => {
             <TableBody>
               {docs.map((doc) => {
                 return (
-                  <TableRow hover key={doc.docId}>
+                  <TableRow hover key={doc.documentationId}>
                     <TableCell>
                       <Button
                         color="primary"
@@ -58,12 +60,12 @@ export const OverviewLatestOrders = (props) => {
                         }
                         size="small"
                         variant="text"
-                        href={`/docs/overview?id=${doc.docId}`}
+                        href={`/docs/overview?id=${doc.documentationId}`}
                       >
                         {doc.alias}
                       </Button>
                     </TableCell>
-                    <TableCell>{doc.docId}</TableCell>
+                    <TableCell>{doc.documentationId}</TableCell>
                     <TableCell>
                       <Button
                         color="inherit"
@@ -75,7 +77,7 @@ export const OverviewLatestOrders = (props) => {
                         size="small"
                         variant="text"
                         onClick={() => {
-                          handleSubmit(doc.docId)
+                          handleSubmit(doc.documentationId)
                         }}
                       >
                         Delete
@@ -100,7 +102,7 @@ export const OverviewLatestOrders = (props) => {
           }
           size="small"
           variant="text"
-          onClick={() => { window.location.href = '/createDoc'}}
+          onClick={() => { navigate('/createDoc') }}
         >
           Create Documentation
         </Button>

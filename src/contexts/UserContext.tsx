@@ -10,12 +10,13 @@ export interface IUserContext {
 
 export const UserContext = createContext<IUserContext>({
   instance: undefined,
-  detail: undefined,
+  detail: undefined
 })
 
 export const UserContextProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const { rioSDK } = useRioSdkContext()
   const [userInstance, setUserInstance] = useState<RetterCloudObject>()
+  const [userDetail, setUserDetail] = useState<any>()
 
   useEffect(() => {
     const authStatusSub = rioSDK.authStatus.subscribe(async (eventAuth: RetterAuthChangedEvent) => {
@@ -28,21 +29,28 @@ export const UserContextProvider: React.FC<{ children: React.ReactNode }> = ({ c
             classId: ProjectClassEnums.User,
             instanceId: eventAuth.uid,
           });
+          const userSub = getUserInstance.state?.public?.subscribe((event: any) => {
+            console.log('useri', event)
+            setUserDetail(event)
+          })
           setUserInstance(getUserInstance);
-          break;
+          return () => {
+            userSub?.unsubscribe()
+          }
       }
     });
+
 
     return () => {
       authStatusSub.unsubscribe();
     };
-  }, []);
+  }, [rioSDK]);
 
   const user = React.useMemo(
     () => ({
       instance: userInstance,
-      detail: undefined
-    }),[userInstance]
+      detail: userDetail,
+    }),[userDetail, userInstance]
   )
 
   return (

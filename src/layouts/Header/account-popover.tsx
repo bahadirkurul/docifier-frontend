@@ -4,20 +4,24 @@ import { Box, Divider, MenuItem, MenuList, Popover, Typography } from '@mui/mate
 import { useAuthContext } from '../../contexts/AuthContext'
 import { RetterTokenPayload } from '@retter/sdk'
 import { useRioSdkContext } from '../../contexts/RioSdkContext'
+import { useLoadingContext } from '../../contexts/LoadingContext'
 
 export const AccountPopover = (props) => {
   const { anchorEl, onClose, open } = props
   const auth = useAuthContext() as any
   const { rioSDK } = useRioSdkContext()
   const [user, setUser] = useState<RetterTokenPayload>()
+  const { setLoadingStatus } = useLoadingContext()
 
   useEffect(() => {
     const getUser = async () => {
+      setLoadingStatus(true)
       const user = await rioSDK.getCurrentUser()
+      setLoadingStatus(false)
       setUser(user)
     }
     getUser()
-  }, [rioSDK])
+  }, [rioSDK, setLoadingStatus])
 
   const handleSignOut = useCallback(async () => {
     onClose?.()

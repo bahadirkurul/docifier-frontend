@@ -1,5 +1,7 @@
 import axios from 'axios'
 import { EXAM_API_URL } from './settings'
+import Rio from '@retter/sdk'
+import { ProjectClassEnums } from './constants'
 
 export const getDocsRequest = async ({ accessToken }) => {
   try {
@@ -19,21 +21,18 @@ export const getDocsRequest = async ({ accessToken }) => {
   }
 }
 
-export const createDocumentation = async ({ title, accessToken }) => {
+export const createDocumentation = async (sdk: Rio, { alias }) => {
   try {
-    const request = await axios.post(
-      `${EXAM_API_URL}/Documentation/createDocumentation`,
-      {
-        alias: title
+    const request = await sdk.getCloudObject({
+      classId: ProjectClassEnums.Documentation,
+      body: {
+        alias,
       },
-      {
-        headers: {
-          _token: accessToken,
-        },
-      },
-    )
-
-    return { success: true, data: request.data }
+    })
+    
+    if (request.isNewInstance !== true) {
+      throw new Error('Failed to create documentation')
+    }
   } catch (error: any) {
     return { success: false, error: error.response.data }
   }

@@ -1,24 +1,18 @@
 import { Box, Container, Unstable_Grid2 as Grid } from '@mui/material';
 // import { OverviewLatestOrders } from '../sections/overview/documentations';
 import { useEffect, useState } from 'react';
-import { useAuthContext } from '../../contexts/AuthContext';
 import { OverviewLatestOrders } from './sections/documentations';
-
-const now = new Date();
+import { useUserContext } from '../../contexts/UserContext';
 
 const Homepage = () => {
-  const auth = useAuthContext() as any
   const [docs, setDocs] = useState([])
-
-  const getDocs = async () => {
-    const gotDocs = await auth.getDocs()
-    setDocs(gotDocs)
-  }
-
+  const { detail } = useUserContext()
+  
   useEffect(() => {
-    document.title = 'Docifier - Homepage'
-    getDocs()
-  }, [])
+    if (detail) {
+      setDocs(detail.documentations)
+    }
+  }, [detail])
 
   return (
     <Box

@@ -7,9 +7,9 @@ import { SvgIcon } from '@mui/material'
 export const documentations = (docs: any[]) => {
   return docs.map((doc) => ({
       type: 'documentation',
-      docId: doc.docId,
+      docId: doc.documentationId,
       title: doc.alias,
-      path: `/docs/overview?id=${doc.docId}`,
+      path: `/docs/overview?id=${doc.documentationId}`,
       icon: (
         <SvgIcon fontSize="small">
           <DocumentTextIcon />

@@ -1,21 +1,22 @@
-import { useCallback, useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useFormik } from 'formik'
 import * as Yup from 'yup'
-import { Alert, Box, Button, FormHelperText, Link, Stack, Tab, Tabs, TextField, Typography } from '@mui/material'
+import { Alert, Box, Button, Link, Stack, TextField, Typography } from '@mui/material'
 import { AuthLayout } from '../../layouts/auth/layout'
 import { useAuthContext } from '../../contexts/AuthContext'
 import { useNavigate } from 'react-router-dom'
 import CustomSpinner from '../../components/CustomSpinner'
+import { useLoadingContext } from '../../contexts/LoadingContext'
 
 const Login = () => {
   const auth = useAuthContext() as any
   const navigate = useNavigate()
-  const [loading, setLoading] = useState(false)
+  const { setLoadingStatus } = useLoadingContext()
 
   const formik = useFormik({
     initialValues: {
       email: 'bahadir@rettermobile.com',
-      password: 'qweasd',
+      password: 'qweasdzxc',
       submit: null,
     },
     validationSchema: Yup.object({
@@ -24,12 +25,12 @@ const Login = () => {
     }),
     onSubmit: async (values, helpers) => {
       try {
-        setLoading(true)
+        setLoadingStatus(true)
         await auth.signIn(values.email, values.password)
-        setLoading(false)
+        setLoadingStatus(false)
         navigate('/')
       } catch (err: any) {
-        setLoading(false)
+        setLoadingStatus(false)
         helpers.setStatus({ success: false })
         helpers.setErrors({ submit: err.message })
         helpers.setSubmitting(false)
@@ -42,7 +43,6 @@ const Login = () => {
   })
 
   return (
-    <CustomSpinner spinning={loading}>
       <AuthLayout>
         <Box
           sx={{
@@ -122,7 +122,6 @@ const Login = () => {
           </Box>
         </Box>
       </AuthLayout>
-    </CustomSpinner>
   )
 }
 

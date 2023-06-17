@@ -8,6 +8,7 @@ import { RioSdkContextProvider } from './contexts/RioSdkContext'
 import { UserContextProvider } from './contexts/UserContext'
 import { App } from './app'
 import { CssBaseline } from '@mui/material';
+import { LoadingContextProvider } from './contexts/LoadingContext'
 
 const root = ReactDOM.createRoot(document.getElementById('root') as HTMLElement)
 
@@ -17,9 +18,11 @@ root.render(
       <RioSdkContextProvider>
         <AuthProvider>
           <UserContextProvider>
+            <LoadingContextProvider>
             <BrowserRouter>
               <App />
             </BrowserRouter>
+            </LoadingContextProvider>
           </UserContextProvider>
         </AuthProvider>
       </RioSdkContextProvider>
