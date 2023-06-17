@@ -1,12 +1,14 @@
 import { useEffect, useState } from 'react'
 import { useFormik } from 'formik'
 import * as Yup from 'yup'
-import { Alert, Box, Button, Link, Stack, TextField, Typography } from '@mui/material'
+import { Alert, Box, Button, Stack, TextField, Typography } from '@mui/material'
 import { AuthLayout } from '../../layouts/auth/layout'
 import { useAuthContext } from '../../contexts/AuthContext'
 import { useNavigate } from 'react-router-dom'
 import CustomSpinner from '../../components/CustomSpinner'
 import { useLoadingContext } from '../../contexts/LoadingContext'
+import { Link as RouterLink } from 'react-router-dom';
+import { Link as MuiLink } from '@mui/material';
 
 const Login = () => {
   const auth = useAuthContext() as any
@@ -57,7 +59,7 @@ const Login = () => {
             sx={{
               maxWidth: 550,
               px: 3,
-              py: '100px',
+              py: '10vh',
               width: '100%',
             }}
           >
@@ -66,9 +68,9 @@ const Login = () => {
                 <Typography variant="h4">Login</Typography>
                 <Typography color="text.secondary" variant="body2">
                   Don&apos;t have an account? &nbsp;
-                  <Link href="/auth/register" underline="hover" variant="subtitle2">
+                  <MuiLink component={RouterLink} to="/auth/register" underline="hover" variant="subtitle2">
                     Register
-                  </Link>
+                  </MuiLink>
                 </Typography>
               </Stack>
 
@@ -98,9 +100,9 @@ const Login = () => {
                   />
                   <Typography color="text.secondary" variant="body2">
                     Forgot your password ? &nbsp;
-                    <Link href="/auth/reset" underline="hover" variant="subtitle2">
+                    <MuiLink component={RouterLink} to={'/auth/forgotPassword'} underline="hover" variant="subtitle2">
                       Reset Password
-                    </Link>
+                    </MuiLink>
                   </Typography>
                 </Stack>
                 {formik.errors.submit && (
@@ -112,11 +114,6 @@ const Login = () => {
                 <Button fullWidth size="large" sx={{ mt: 3 }} type="submit" variant="contained">
                   Log In
                 </Button>
-                <Alert color={'info'} severity="info" sx={{ mt: 3 }}>
-                  <div>
-                    You can use <b>demo@devias.io</b> and password <b>Password123!</b>
-                  </div>
-                </Alert>
               </form>
             </div>
           </Box>

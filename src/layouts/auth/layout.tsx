@@ -1,61 +1,61 @@
-import PropTypes from 'prop-types';
-import { Box, Typography, Unstable_Grid2 as Grid } from '@mui/material';
-import { Logo } from '../../components/logo';
+import PropTypes from 'prop-types'
+import { Box, Typography, Unstable_Grid2 as Grid, Avatar, IconButton, Stack, SvgIcon, alpha } from '@mui/material'
+import { Logo } from '../../components/logo'
+import Bars3Icon from '@heroicons/react/24/solid/Bars3Icon'
+import DarkModeIcon from '@mui/icons-material/DarkMode'
+import LightModeIcon from '@mui/icons-material/LightMode'
+import { useThemeContext } from '../../contexts/ThemeContext'
 
-// TODO: Change subtitle text
+// TODO: Change subtitle text,
 
 export const AuthLayout = (props) => {
-  const { children } = props;
+  const { children } = props
+  const { mode, toggleColorMode } = useThemeContext()
 
   return (
-    <Box
-      component="main"
-      // xs={12}
-      sx={{
-        display: 'flex',
-        alignContent: 'center',
-        alignItems: 'center',
-      }}
-    >
-      <Grid
-        container
-        xs={12}
+    <>
+      <Box
+        component="header"
+        sx={{
+          position: 'relative',
+          width: '100%',
+          zIndex: (theme) => theme.zIndex.appBar,
+        }}
       >
-        <Grid
-          xs={12}
+        <Stack
+          alignItems="center"
+          direction="row"
+          justifyContent="space-between"
+          spacing={2}
           sx={{
-            backgroundColor: 'background.paper',
-            display: 'flex',
-            flexDirection: 'column',
-            position: 'relative'
+            px: 2,
           }}
         >
-          <Box
-            component="header"
-            sx={{
-              left: 0,
-              p: 3,
-              position: 'fixed',
-              top: 0,
-              width: '100%'
-            }}
-          >
-            <Box
-                          sx={{
-                            display: 'inline-flex',
-                            height: 32,
-                            width: 32
-                          }}>
-              <Logo />
+          <Stack alignItems="center" direction="row" spacing={2}>
+            <Box sx={{ p: 3 }}>
+              <Box
+                sx={{
+                  display: 'inline-flex',
+                  height: 32,
+                  width: 32,
+                }}
+              >
+                <Logo />
+              </Box>
             </Box>
-          </Box>
-          {children}
-        </Grid>
-      </Grid>
-    </Box>
-  );
-};
+          </Stack>
+          <Stack alignItems="center" direction="row" spacing={2}>
+            <IconButton onClick={toggleColorMode} size="large">
+              {mode === 'light' ? <DarkModeIcon fontSize="medium" /> : <LightModeIcon fontSize="medium" />}
+            </IconButton>
+          </Stack>
+        </Stack>
+      </Box>
+      {children}
+    </>
+  )
+}
 
 AuthLayout.prototypes = {
-  children: PropTypes.node
-};
+  children: PropTypes.node,
+}

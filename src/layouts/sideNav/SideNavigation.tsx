@@ -21,7 +21,7 @@ export const SideNavigation = (props) => {
   const location = useLocation();
   const { detail } = useUserContext()
   const [docs, setDocs] = useState([])
-
+  
   useEffect(() => {
     document.title = "Docifier - Homepage";
     if (detail) {

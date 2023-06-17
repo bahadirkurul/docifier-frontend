@@ -1,11 +1,13 @@
 import { useFormik } from 'formik'
 import * as Yup from 'yup'
-import { Box, Button, Link, Stack, TextField, Typography } from '@mui/material'
+import { Box, Button, Stack, TextField, Typography } from '@mui/material'
 import { AuthLayout } from '../../layouts/auth/layout'
 import { useAuthContext } from '../../contexts/AuthContext'
 import { useNavigate } from 'react-router-dom'
 import { useEffect, useState } from 'react'
 import CustomSpinner from '../../components/CustomSpinner'
+import { Link as RouterLink } from 'react-router-dom';
+import { Link as MuiLink } from '@mui/material';
 
 const Register = () => {
   const auth = useAuthContext() as any
@@ -69,7 +71,7 @@ const Register = () => {
             sx={{
               maxWidth: 550,
               px: 3,
-              py: '100px',
+              py: '10vh',
               width: '100%',
             }}
           >
@@ -78,9 +80,9 @@ const Register = () => {
                 <Typography variant="h4">Register</Typography>
                 <Typography color="text.secondary" variant="body2">
                   Already have an account? &nbsp;
-                  <Link href="/auth/login" underline="hover" variant="subtitle2">
+                  <MuiLink component={RouterLink} to="/auth/login" underline="hover" variant="subtitle2">
                     Log in
-                  </Link>
+                  </MuiLink>
                 </Typography>
               </Stack>
               <form noValidate onSubmit={formik.handleSubmit}>
