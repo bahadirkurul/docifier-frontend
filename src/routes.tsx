@@ -1,4 +1,3 @@
-import { AuthGuard } from "./guards/auth-guard";
 import NotFound from "./pages/NotFound";
 import Account from "./pages/account/account";
 import Login from "./pages/auth/login";
@@ -23,15 +22,15 @@ export const privateRoutes = [
     element: <Account />,
   },
   {
-    path: '/docs',
+    path: '/docs/:documentationId/:documentId',
     element: <DocDetails />,
   },
   {
-    path: '/docs/settings',
+    path: '/docs/settings/:documentationId',
     element: <DocSettings />,
   },
   {
-    path: '/docs/overview',
+    path: '/docs/overview/:documentationId',
     element: <DocOverview />,
   },
 ]

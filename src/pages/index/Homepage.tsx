@@ -7,11 +7,11 @@ import { useUserContext } from '../../contexts/UserContext';
 const Homepage = () => {
   const [docs, setDocs] = useState([])
   const { detail } = useUserContext()
-  
+
   useEffect(() => {
     if (detail) {
       setDocs(detail.documentations)
-    }
+    } 
   }, [detail])
 
   return (

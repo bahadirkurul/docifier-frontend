@@ -8,22 +8,7 @@ const DocSettings = () => {
   const [doc, setDocument] = useState()
 
   useEffect(() => {
-    const getDoc = async () => {
-      const queryParams = new URLSearchParams(window.location.search)
-      const id = queryParams.get('id')
-  
-      const docs = ((await auth.getDocs()) as any[]) || []
-      const existDoc = docs.find((doc) => doc.docId === id)
-  
-      if (!existDoc) {
-        window.location.href = '/'
-      }
 
-      document.title = `Docifier - ${existDoc!.alias} - Overview`;
-      setDocument(existDoc)
-    }
-
-    getDoc()
   }, [])
 
   return (
@@ -31,7 +16,7 @@ const DocSettings = () => {
         component="main"
         sx={{
           flexGrow: 1,
-          py: 8,
+          py: 2,
         }}
       >
         <Grid container spacing={5}>

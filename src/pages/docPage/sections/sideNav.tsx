@@ -1,194 +1,173 @@
 import { useEffect, useRef, useState } from 'react'
-import { Box, ButtonBase, Card, CardContent, CardHeader, Divider, Stack } from '@mui/material'
-import { useAuthContext } from '../../../contexts/AuthContext'
+import { Box, ButtonBase, Card, CardContent, CardHeader, Collapse, Divider, Stack, SvgIconProps, Typography, alpha, styled, useTheme } from '@mui/material'
 import { Scrollbar } from '../../../components/scrollbar'
-import { useLocation, useNavigate } from 'react-router-dom'
+import { useLocation, useNavigate, useParams } from 'react-router-dom'
 import { DocSideNavItem } from './side-nav-item'
 import { staticDocTabs } from './config'
-import { TreeView, TreeItem } from '@mui/lab'
+import { TreeView, TreeItem, treeItemClasses, TreeItemProps } from '@mui/lab'
 import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown'
 import TextSnippet from '@mui/icons-material/Description'
 import ArrowRightIcon from '@mui/icons-material/ArrowRight'
 import { Tree } from 'react-arborist'
 import DocumentTextIcon from '@heroicons/react/24/solid/DocumentTextIcon'
 import AutoSize from 'react-virtualized-auto-sizer'
+import { useSpring, animated } from '@react-spring/web'
+import { TransitionProps } from '@mui/material/transitions'
 
-const items = [
-  {
-    title: 'Getting Started',
-    id: 'getting-started',
-    children: [],
-    order: 1,
-    type: 'document',
-  },
-  {
-    title: 'Authentication',
-    id: 'authentication',
-    type: 'folder',
-    children: [
-      {
-        title: 'Login',
-        id: 'login',
-        type: 'document',
-        children: [],
-        order: 1,
-      },
-    ],
-    order: 2,
-  },
-  {
-    title: 'Getting Started',
-    id: 'getting-started',
-    children: [],
-    order: 3,
-    type: 'document',
-  },
-]
+interface RenderTree {
+  id: string
+  name: string
+  children?: readonly RenderTree[]
+}
 
-const data = [
-  { id: '1', name: 'Unread' },
-  { id: '2', name: 'Threads' },
-  {
-    id: '3',
-    name: 'Chat Rooms',
-    children: [
-      {
-        id: 'c1',
-        name: 'General',
-        children: [
-          { id: 'c12', name: 'General' },
-          { id: 'c22', name: 'Random' },
-          { id: 'c32', name: 'Open Source Projects' },
-        ],
-      },
-      { id: 'c2', name: 'Random' },
-      { id: 'c3', name: 'Open Source Projects' },
-    ],
+type StyledTreeItemProps = TreeItemProps & {
+  bgColor?: string;
+  bgColorForDarkMode?: string;
+  color?: string;
+  colorForDarkMode?: string;
+  labelIcon: React.ElementType<SvgIconProps>;
+  labelInfo?: string;
+  labelText: string;
+};
+
+const data: RenderTree = {
+  id: 'root',
+  name: 'Parent',
+  children: [
+    {
+      id: '1',
+      name: 'Child - 1',
+    },
+    {
+      id: '3',
+      name: 'Child - 3',
+      children: [
+        {
+          id: '4',
+          name: 'Child - 4',
+        },
+      ],
+    },
+  ],
+}
+
+function TransitionComponent(props: TransitionProps) {
+  const style = useSpring({
+    from: {
+      opacity: 0,
+      transform: 'translate3d(20px,0,0)',
+    },
+    to: {
+      opacity: props.in ? 1 : 0,
+      transform: `translate3d(${props.in ? 0 : 20}px,0,0)`,
+    },
+  })
+
+  return (
+    <animated.div style={style}>
+      <Collapse {...props} />
+    </animated.div>
+  )
+}
+
+const StyledTreeItem = styled((props: TreeItemProps) => <TreeItem {...props} TransitionComponent={TransitionComponent} />)(({ theme }) => ({
+  [`& .${treeItemClasses.content}`]: {
+    color: theme.palette.text.secondary,
+    borderTopRightRadius: theme.spacing(2),
+    borderBottomRightRadius: theme.spacing(2),
+    paddingRight: theme.spacing(1),
+    fontWeight: theme.typography.fontWeightMedium,
+    '&.Mui-expanded': {
+      fontWeight: theme.typography.fontWeightRegular,
+    },
+    '&:hover': {
+      backgroundColor: theme.palette.action.hover,
+    },
+    '&.Mui-focused, &.Mui-selected, &.Mui-selected.Mui-focused': {
+      backgroundColor: `var(--tree-view-bg-color, ${theme.palette.action.selected})`,
+      color: 'var(--tree-view-color)',
+    },
+    [`& .${treeItemClasses.label}`]: {
+      fontWeight: 'inherit',
+      color: 'inherit',
+    },
   },
-  {
-    id: '4',
-    name: 'Direct Messages',
-    children: [
-      { id: 'd1', name: 'Alice' },
-      { id: 'd2', name: 'Bob' },
-      { id: 'd3', name: 'Charlie', children: [] },
-    ],
+  [`& .${treeItemClasses.iconContainer}`]: {
+    '& .close': {
+      opacity: 0.3,
+    },
   },
-]
+  [`& .${treeItemClasses.group}`]: {
+    marginLeft: 15,
+    paddingLeft: 18,
+    borderLeft: `1px solid ${alpha(theme.palette.text.primary, 0.3)}`,
+  },
+}))
+
+function StyledTreeItemV2(props: StyledTreeItemProps) {
+  const theme = useTheme();
+  const {
+    bgColor,
+    color,
+    labelIcon: LabelIcon,
+    labelInfo,
+    labelText,
+    colorForDarkMode,
+    bgColorForDarkMode,
+    ...other
+  } = props;
+
+  const styleProps = {
+    '--tree-view-color': theme.palette.mode !== 'dark' ? color : colorForDarkMode,
+    '--tree-view-bg-color':
+      theme.palette.mode !== 'dark' ? bgColor : bgColorForDarkMode,
+  };
+
+  return (
+    <StyledTreeItem
+      label={
+        <Box
+          sx={{
+            display: 'flex',
+            alignItems: 'center',
+            p: 0.5,
+            pr: 0,
+          }}
+        >
+          <Box component={LabelIcon} color="inherit" sx={{ mr: 1 }} />
+          <Typography variant="body2" sx={{ fontWeight: 'inherit', flexGrow: 1 }}>
+            {labelText}
+          </Typography>
+          <Typography variant="caption" color="inherit">
+            {labelInfo}
+          </Typography>
+        </Box>
+      }
+      {...other}
+    />
+  );
+}
 
 export const DocSideNav = () => {
-  const auth = useAuthContext() as any
   const location = useLocation()
-  const [docTree, setDocTree] = useState() as any
-
-  const convertDocTreeItemToData = (docTreeItem) => {
-    const { itemId, name, children, itemType } = docTreeItem
-    const data = {
-      id: itemId,
-      name,
-    } as any
-
-    if (children && children.length > 0) {
-      data.children = children.map(convertDocTreeItemToData)
-    }
-    
-    return data
-  }
-
-  useEffect(() => {
-    async function getDocTree() {
-      const queryParams = new URLSearchParams(window.location.search)
-      const id = queryParams.get('id')
-
-      const docTreeRes = (await auth.getDocTree(id))
-      console.log(docTreeRes);
-      
-      setDocTree(docTreeRes.tree.map(convertDocTreeItemToData)) 
-    }
-
-    getDocTree()
-  }, [])
-
-  function Node({ node, style, dragHandle }) {
-    /* This node instance can do many things. See the API reference. */
-    const queryParams = new URLSearchParams(window.location.search)
-    const id = queryParams.get('id')
-    const sheetId = queryParams.get('sheet')
-    console.log(node.data.id, id)
-
-    return (
-      <ButtonBase
-        style={style}
-        ref={dragHandle}
-        onClick={() => {
-          node.toggle()
-          if (node.isLeaf) {
-            window.location.href = `/docs?id=${id}&sheet=${node.data.id}`
-          }
-        }}
-        sx={{
-          alignItems: 'center',
-          borderRadius: 1,
-          display: 'flex',
-          justifyContent: 'flex-start',
-          pl: '16px',
-          pr: '16px',
-          py: '6px',
-          textAlign: 'left',
-          width: '100%',
-          ...((node.isSelected || node.data.id === sheetId) && {
-            backgroundColor: 'rgba(255, 255, 255, 0.04)',
-          }),
-          '&:hover': {
-            backgroundColor: 'rgba(255, 255, 255, 0.04)',
-          },
-        }}
-      >
-        <Box
-          component="span"
-          sx={{
-            alignItems: 'center',
-            color: 'neutral.400',
-            display: 'inline-flex',
-            justifyContent: 'center',
-            mr: 2,
-            ...((node.isSelected || node.data.id === sheetId) &&
-              !node.isInternal && {
-                color: 'primary.main',
-              }),
-          }}
-        >
-          {node.isInternal && node.isOpen && <ArrowDropDownIcon />}
-          {node.isInternal && !node.isOpen && <ArrowRightIcon />}
-          {node.isLeaf && <TextSnippet fontSize="small" />}
-        </Box>
-        <Box
-          component="span"
-          sx={{
-            color: 'neutral.400',
-            flexGrow: 1,
-            fontFamily: (theme) => theme.typography.fontFamily,
-            fontSize: 14,
-            fontWeight: 600,
-            lineHeight: '24px',
-            whiteSpace: 'nowrap',
-            ...((node.isSelected || node.data.id === sheetId) &&
-              !node.isInternal && {
-                color: 'primary.main',
-              }),
-          }}
-        >
-          {node.data.name}
-        </Box>
-      </ButtonBase>
-    )
-  }
+  let { documentationId, documentId } = useParams()
+  const navigate = useNavigate()
+  const renderTree = (nodes: RenderTree) => (
+    <StyledTreeItem key={nodes.id} nodeId={nodes.id} label={nodes.name} 
+    onClick={() => {
+      if (!nodes.children || nodes.children?.length <= 0) {
+        navigate(`/docs/${documentationId}/${nodes.id}`)
+      }
+    }}>
+      {Array.isArray(nodes.children) ? nodes.children.map((node) => renderTree(node)) : null}
+    </StyledTreeItem>
+  )
 
   return (
     <Scrollbar
       sx={{
-        position: "sticky",
-        top: "1.5rem",
+        position: 'sticky',
+        top: '1.5rem',
         '& .simplebar-content': {
           height: '100%',
         },
@@ -225,12 +204,10 @@ export const DocSideNav = () => {
                   m: 0,
                 }}
               >
-                {staticDocTabs()
+                {staticDocTabs(documentationId!)
                   .filter((i: any) => i!.type === 'docTab')
                   .map((item: any) => {
-                    const queryParams = new URLSearchParams(window.location.search)
-                    const id = queryParams.get('id')
-                    const active = item.path ? location.pathname + '?id=' + id === item.path : false
+                    const active = item.path ? location.pathname === item.path : false
 
                     return <DocSideNavItem active={active} disabled={item.disabled} external={item.external} icon={item.icon} key={item.title} path={item.path} title={item.title} />
                   })}
@@ -250,10 +227,17 @@ export const DocSideNav = () => {
           <Card>
             <CardHeader title="Document Tree" />
             <Divider />
-            <CardContent sx={{ py: 0 }}>
-              <Tree initialData={docTree} openByDefault={false} width={275} height={600} indent={24} rowHeight={36} overscanCount={1} paddingTop={30} paddingBottom={10} padding={25 /* sets both */}>
-                {Node as any}
-              </Tree>
+            <CardContent sx={{ py: 2 }}>
+              <TreeView
+                aria-label="customized"
+                defaultExpanded={['1']}
+                defaultCollapseIcon={<ArrowDropDownIcon />}
+                defaultExpandIcon={<ArrowRightIcon />}
+                defaultEndIcon={<DocumentTextIcon />}
+                sx={{ height: 264, flexGrow: 1, maxWidth: 400, overflowY: 'none' }}
+              >
+                {renderTree(data)}
+              </TreeView>
             </CardContent>
           </Card>
         </Box>

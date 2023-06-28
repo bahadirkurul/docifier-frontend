@@ -10,7 +10,7 @@ import {
 import { Logo } from "../../components/logo";
 import { Scrollbar } from "../../components/scrollbar";
 import { SideNavItem } from "./SideNavItem";
-import { useLocation } from "react-router-dom";
+import { useLocation, useParams } from "react-router-dom";
 import { documentations, userTabs } from "./config";
 import { useEffect, useState } from "react";
 import { useUserContext } from "../../contexts/UserContext";
@@ -21,6 +21,7 @@ export const SideNavigation = (props) => {
   const location = useLocation();
   const { detail } = useUserContext()
   const [docs, setDocs] = useState([])
+  let { documentationId } = useParams();
   
   useEffect(() => {
     document.title = "Docifier - Homepage";
@@ -274,9 +275,7 @@ export const SideNavigation = (props) => {
             {documentations(docs)
               .filter((i: any) => i.type === "documentation")
               .map((item: any) => {
-                const queryParams = new URLSearchParams(window.location.search);
-                const id = queryParams.get('id');
-                const active = item.docId === id ? true : false;
+                const active = item.docId === documentationId ? true : false;
                 
                 return (
                   <SideNavItem

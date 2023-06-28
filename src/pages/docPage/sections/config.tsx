@@ -3,34 +3,17 @@ import Cog8ToothIcon from '@heroicons/react/24/solid/Cog8ToothIcon'
 import DocumentMagnifyingGlassIcon from '@heroicons/react/24/solid/DocumentMagnifyingGlassIcon'
 import DocumentPlusIcon from '@heroicons/react/24/solid/DocumentPlusIcon'
 import { SvgIcon } from '@mui/material'
-import { useLocation } from 'react-router-dom'
+import { useLocation, useParams } from 'react-router-dom'
 
 
-
-export const documentations = (docs: any[]) => {
-  return docs.map((doc) => ({
-      type: 'documentation',
-      docId: doc.docId,
-      title: doc.alias,
-      path: `/docs?id=${doc.docId}`,
-      icon: (
-        <SvgIcon fontSize="small">
-          <DocumentTextIcon />
-        </SvgIcon>
-      ),
-    }))
-  
-}
-
-export const staticDocTabs = () => {
+export const staticDocTabs = (documentationId: string) => {
   const search = window.location.search
-  const params = new URLSearchParams(search)
-  const id = params.get('id')
+
   return [
     {
       type: 'docTab',
       title: 'Overview',
-      path: `/docs/overview?id=${id}`,
+      path: `/docs/overview/${documentationId}`,
       icon: (
         <SvgIcon fontSize="small">
           <DocumentMagnifyingGlassIcon />
@@ -40,7 +23,7 @@ export const staticDocTabs = () => {
     {
       type: 'docTab',
       title: 'Settings',
-      path: `/docs/settings?id=${id}`,
+      path: `/docs/settings/${documentationId}`,
       icon: (
         <SvgIcon fontSize="small">
           <Cog8ToothIcon />

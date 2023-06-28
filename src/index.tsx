@@ -17,13 +17,15 @@ root.render(
       <CssBaseline />
       <RioSdkContextProvider>
         <AuthProvider>
+
+        <LoadingContextProvider>
           <UserContextProvider>
-            <LoadingContextProvider>
             <BrowserRouter>
               <App />
             </BrowserRouter>
-            </LoadingContextProvider>
           </UserContextProvider>
+
+          </LoadingContextProvider>
         </AuthProvider>
       </RioSdkContextProvider>
     </ThemeContextProvider>

@@ -1,9 +1,7 @@
-import PropTypes from 'prop-types'
-import { Box, Button, Divider, Drawer, Grid, Stack, SvgIcon, Typography, useMediaQuery } from '@mui/material'
+import { Grid } from '@mui/material'
 import { Route, Routes } from 'react-router-dom'
 import { privateRoutes, publicRoutes } from './routes'
-import { useRioSdkContext } from './contexts/RioSdkContext'
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 import { AuthGuard } from './guards/auth-guard'
 import './app.css'
 import { Header } from './layouts/Header/header'
@@ -43,12 +41,7 @@ export const App = (props) => {
         ))}
 
         {publicRoutes.map((route, index) => (
-          <Route key={index} path={route.path} element={
-
-            <CustomSpinner spinning={loading}>
-              {route.element}
-            </CustomSpinner>
-          } />
+          <Route key={index} path={route.path} element={<CustomSpinner spinning={loading}>{route.element}</CustomSpinner>} />
         ))}
       </Routes>
     </>

@@ -1,11 +1,10 @@
-import { useEffect, useState } from 'react'
+import { useEffect } from 'react'
 import { useFormik } from 'formik'
 import * as Yup from 'yup'
-import { Alert, Box, Button, Stack, TextField, Typography } from '@mui/material'
+import { Box, Button, Stack, TextField, Typography } from '@mui/material'
 import { AuthLayout } from '../../layouts/auth/layout'
 import { useAuthContext } from '../../contexts/AuthContext'
 import { useNavigate } from 'react-router-dom'
-import CustomSpinner from '../../components/CustomSpinner'
 import { useLoadingContext } from '../../contexts/LoadingContext'
 import { Link as RouterLink } from 'react-router-dom';
 import { Link as MuiLink } from '@mui/material';

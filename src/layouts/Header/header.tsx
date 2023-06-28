@@ -1,5 +1,5 @@
 import Bars3Icon from '@heroicons/react/24/solid/Bars3Icon'
-import { Avatar, Box, Button, IconButton, Stack, SvgIcon, Typography, useMediaQuery } from '@mui/material'
+import { Avatar, Box, Button, Divider, IconButton, Stack, SvgIcon, Typography, useMediaQuery } from '@mui/material'
 import { alpha } from '@mui/material/styles'
 import { useThemeContext } from '../../contexts/ThemeContext'
 import { usePopover } from '../../hooks/use-popover'
@@ -102,6 +102,7 @@ export const Header = (props) => {
             </Avatar>
           </Stack>
         </Stack>
+        <Divider/>
       </Box>
       <AccountPopover anchorEl={accountPopover.anchorRef.current} open={accountPopover.open} onClose={accountPopover.handleClose} />
     </>

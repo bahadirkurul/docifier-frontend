@@ -30,7 +30,6 @@ export const UserContextProvider: React.FC<{ children: React.ReactNode }> = ({ c
             instanceId: eventAuth.uid,
           });
           const userSub = getUserInstance.state?.public?.subscribe((event: any) => {
-            console.log('useri', event)
             setUserDetail(event)
           })
           setUserInstance(getUserInstance);

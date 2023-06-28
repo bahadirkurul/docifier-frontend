@@ -10,30 +10,7 @@ const DocDetails = () => {
   const [docSheetId, setDocSheetId] = useState("")
 
   useEffect(() => {
-    const getDoc = async () => {
-      const queryParams = new URLSearchParams(window.location.search)
-      const id = queryParams.get('id')
-      const sheetId = queryParams.get('sheet')
 
-      if (!id || !sheetId) {
-        window.location.href = '/'
-      }
-
-      setDocId(id!)
-      setDocSheetId(sheetId!)
-      console.log(docId);
-      console.log(docSheetId);
-      const docs = ((await auth.getDocs()) as any[]) || []
-      const existDoc = docs.find((doc) => doc.docId === id)
-
-      if (!existDoc) {
-        window.location.href = '/'
-      }
-
-      document.title = `Docifier - ${existDoc!.alias}`;
-    }
-
-    getDoc()
   }, [])
 
   return (

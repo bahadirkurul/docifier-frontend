@@ -8,7 +8,6 @@ import {
   CardActions,
   CardHeader,
   Divider,
-  Link,
   SvgIcon,
   Table,
   TableBody,
@@ -19,7 +18,7 @@ import {
 } from '@mui/material';
 import { Scrollbar } from '../../../components/scrollbar';
 import { useAuthContext } from '../../../contexts/AuthContext';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 
 export const OverviewLatestOrders = (props) => {
   const { docs = [], sx } = props;
@@ -60,7 +59,7 @@ export const OverviewLatestOrders = (props) => {
                         }
                         size="small"
                         variant="text"
-                        href={`/docs/overview?id=${doc.documentationId}`}
+                        onClick={() => { navigate(`/docs/overview/${doc.documentationId}`) }}
                       >
                         {doc.alias}
                       </Button>
