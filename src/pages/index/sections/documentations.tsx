@@ -17,16 +17,16 @@ import {
   Typography
 } from '@mui/material';
 import { Scrollbar } from '../../../components/scrollbar';
-import { useAuthContext } from '../../../contexts/AuthContext';
-import { Link, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
+import { useDocumentationContext } from '../../../contexts/DocumentationContext';
 
 export const OverviewLatestOrders = (props) => {
   const { docs = [], sx } = props;
-  const auth = useAuthContext() as any;
   const navigate = useNavigate();
+  const { deleteDocumentation } = useDocumentationContext();
 
-  const handleSubmit = async (docId: string) => {
-    await auth.deleteDoc(docId)
+  const handleSubmit = async (documentationId: string) => {
+    await deleteDocumentation(documentationId)
 
     window.location.reload()
   }
@@ -41,7 +41,7 @@ export const OverviewLatestOrders = (props) => {
             <TableHead>
               <TableRow>
                 <TableCell>Title</TableCell>
-                <TableCell>Doc ID</TableCell>
+                <TableCell>Documentation ID</TableCell>
                 <TableCell>Actions</TableCell>
               </TableRow>
             </TableHead>
@@ -90,7 +90,6 @@ export const OverviewLatestOrders = (props) => {
           </Table>
         </Box>
       </Scrollbar>
-      <Divider />
       <CardActions sx={{ justifyContent: 'flex-end' }}>
         <Button
           color="inherit"

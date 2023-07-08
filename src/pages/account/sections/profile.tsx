@@ -1,26 +1,11 @@
-import { Avatar, Box, Button, Card, CardActions, CardContent, CardHeader, Divider, Link, Stack, TextField, Typography } from '@mui/material'
-import { useEffect, useRef, useState } from 'react'
-import { useRioSdkContext } from '../../../contexts/RioSdkContext'
-import { RetterTokenPayload } from '@retter/sdk'
+import { Box, Button, Card, CardActions, CardContent, CardHeader, Divider, Stack, TextField, Typography } from '@mui/material'
+import { useEffect } from 'react'
 import * as Yup from 'yup'
-import { Form, useFormik } from 'formik'
-
-const avatarStyle = {
-  backgroundColor: '#3f51b5',
-  height: 56,
-  width: 56,
-}
-
-const courseListStyle = {
-  border: '1px solid #ccc',
-  borderRadius: '4px',
-  padding: '8px',
-  margin: '16px 0',
-}
+import { useFormik } from 'formik'
+import { useUserContext } from '../../../contexts/UserContext'
 
 export const AccountProfile = ({ auth }) => {
-  const [user, setUser] = useState<RetterTokenPayload>()
-  const { rioSDK } = useRioSdkContext()
+  const { tokenClaims } = useUserContext()
 
   const formik = useFormik({
     initialValues: {
@@ -44,29 +29,10 @@ export const AccountProfile = ({ auth }) => {
   })
 
   useEffect(() => {
-    const getUser = async () => {
-      const user = await rioSDK.getCurrentUser()
-      setUser(user)
-    }
-    getUser()
-
-    formik.values.email = user?.claims?.email
-    formik.values.name = user?.claims?.name
-    formik.values.surname = user?.claims?.surname
-  }, [rioSDK, user?.claims?.email, user?.claims?.name, user?.claims?.surname])
-
-  function getInitials(firstName = '', lastName = '') {
-    // Extract the first character of the first name
-    const firstInitial = firstName.charAt(0)
-
-    // Extract the first character of the last name
-    const lastInitial = lastName.charAt(0)
-
-    // Concatenate the initials together
-    const initials = `${firstInitial}${lastInitial}`
-
-    return initials
-  }
+    formik.values.email = tokenClaims?.claims.email
+    formik.values.name = tokenClaims?.claims.name
+    formik.values.surname = tokenClaims?.claims.surname
+  }, [formik.values, tokenClaims?.claims.email, tokenClaims?.claims.name, tokenClaims?.claims.surname])
 
   return (
     <form noValidate onSubmit={formik.handleSubmit} style={{ width: '100%' }}>

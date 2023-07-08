@@ -1,5 +1,5 @@
 import Bars3Icon from '@heroicons/react/24/solid/Bars3Icon'
-import { Avatar, Box, Button, Divider, IconButton, Stack, SvgIcon, Typography, useMediaQuery } from '@mui/material'
+import { Avatar, Box, Divider, IconButton, Stack, SvgIcon, useMediaQuery } from '@mui/material'
 import { alpha } from '@mui/material/styles'
 import { useThemeContext } from '../../contexts/ThemeContext'
 import { usePopover } from '../../hooks/use-popover'
@@ -7,9 +7,7 @@ import { AccountPopover } from './account-popover'
 import { Logo } from '../../components/logo'
 import DarkModeIcon from '@mui/icons-material/DarkMode';
 import LightModeIcon from '@mui/icons-material/LightMode';
-import { useEffect, useState } from 'react'
-import { RetterTokenPayload } from '@retter/sdk'
-import { useRioSdkContext } from '../../contexts/RioSdkContext'
+import { useUserContext } from '../../contexts/UserContext'
 
 const TOP_NAV_HEIGHT = 34
 
@@ -18,16 +16,8 @@ export const Header = (props) => {
   const lgUp = useMediaQuery((theme: any) => theme.breakpoints.up('lg'))
   const accountPopover = usePopover()
   const { mode, toggleColorMode } = useThemeContext()
-  const [user, setUser] = useState<RetterTokenPayload>()
-  const { rioSDK } = useRioSdkContext()
-  
-  useEffect(() => {
-    const getUser = async () => {
-      const user = await rioSDK.getCurrentUser()
-      setUser(user)
-    }
-    getUser()
-  }, [rioSDK])
+  const { tokenClaims } = useUserContext()
+
 
   function getInitials(firstName = "", lastName= "") {
     // Extract the first character of the first name
@@ -98,7 +88,7 @@ export const Header = (props) => {
                 backgroundColor: '#3f51b5',
               }}
             >
-              {getInitials(user?.claims?.name, user?.claims?.surname)}
+              {getInitials(tokenClaims?.claims.name, tokenClaims?.claims.surname)}
             </Avatar>
           </Stack>
         </Stack>

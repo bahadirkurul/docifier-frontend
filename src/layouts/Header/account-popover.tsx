@@ -1,27 +1,14 @@
-import { useCallback, useEffect, useState } from 'react'
+import { useCallback } from 'react'
 import PropTypes from 'prop-types'
 import { Box, Divider, MenuItem, MenuList, Popover, Typography } from '@mui/material'
 import { useAuthContext } from '../../contexts/AuthContext'
-import { RetterTokenPayload } from '@retter/sdk'
-import { useRioSdkContext } from '../../contexts/RioSdkContext'
-import { useLoadingContext } from '../../contexts/LoadingContext'
+import { useUserContext } from '../../contexts/UserContext'
 
 export const AccountPopover = (props) => {
   const { anchorEl, onClose, open } = props
   const auth = useAuthContext() as any
-  const { rioSDK } = useRioSdkContext()
-  const [user, setUser] = useState<RetterTokenPayload>()
-  const { setLoadingStatus } = useLoadingContext()
+  const { firebaseUser } = useUserContext()
 
-  useEffect(() => {
-    const getUser = async () => {
-      setLoadingStatus(true)
-      const user = await rioSDK.getCurrentUser()
-      setLoadingStatus(false)
-      setUser(user)
-    }
-    getUser()
-  }, [rioSDK, setLoadingStatus])
 
   const handleSignOut = useCallback(async () => {
     onClose?.()
@@ -47,7 +34,7 @@ export const AccountPopover = (props) => {
       >
         <Typography variant="overline">Account</Typography>
         <Typography color="text.secondary" variant="body2">
-          {user?.claims?.name + ' ' + user?.claims?.surname}
+          {firebaseUser?.displayName}
         </Typography>
       </Box>
       <Divider />

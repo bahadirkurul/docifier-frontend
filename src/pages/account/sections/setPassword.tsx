@@ -2,8 +2,11 @@ import { useCallback, useState } from 'react'
 import { Button, Card, CardActions, CardContent, CardHeader, Divider, Stack, TextField, Typography } from '@mui/material'
 import * as Yup from 'yup'
 import { useFormik } from 'formik'
+import { useUserContext } from '../../../contexts/UserContext'
 
 export const SettingsPassword = () => {
+  const { changePassword } = useUserContext()
+
   const formik = useFormik({
     initialValues: {
       oldPassword: '',
@@ -12,11 +15,10 @@ export const SettingsPassword = () => {
       submit: null,
     },
     validationSchema: Yup.object({
-      email: Yup.string().email('Must be a valid email').max(255).required('Email is required'),
-      password: Yup.string().max(255).required('Password is required'),
     }),
     onSubmit: async (values, helpers) => {
       try {
+        await changePassword(values.oldPassword, values.newPassword, values.newPasswordConfirm)
       } catch (err: any) {
         helpers.setStatus({ success: false })
         helpers.setErrors({ submit: err.message })

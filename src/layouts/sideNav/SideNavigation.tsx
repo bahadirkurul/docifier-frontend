@@ -19,16 +19,15 @@ export const SideNavigation = (props) => {
   const { open, onClose } = props;
   const lgUp = useMediaQuery((theme: any) => theme.breakpoints.up("lg"));
   const location = useLocation();
-  const { detail } = useUserContext()
   const [docs, setDocs] = useState([])
   let { documentationId } = useParams();
   
   useEffect(() => {
     document.title = "Docifier - Homepage";
-    if (detail) {
-      setDocs(detail.documentations)
-    }
-  }, [detail]);
+    // if (detail) {
+    //   setDocs(detail.documentations)
+    // }
+  }, []);
 
   const content = (
     <Scrollbar

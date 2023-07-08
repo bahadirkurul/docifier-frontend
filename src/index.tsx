@@ -4,31 +4,32 @@ import reportWebVitals from './reportWebVitals'
 import { BrowserRouter } from 'react-router-dom'
 import { AuthProvider } from './contexts/AuthContext'
 import { ThemeContextProvider } from './contexts/ThemeContext'
-import { RioSdkContextProvider } from './contexts/RioSdkContext'
 import { UserContextProvider } from './contexts/UserContext'
 import { App } from './app'
-import { CssBaseline } from '@mui/material';
+import { CssBaseline } from '@mui/material'
 import { LoadingContextProvider } from './contexts/LoadingContext'
+import { FirebaseContextProvider } from './contexts/FirebaseContext'
+import { DocumentationContextProvider } from './contexts/DocumentationContext'
 
 const root = ReactDOM.createRoot(document.getElementById('root') as HTMLElement)
 
 root.render(
-    <ThemeContextProvider>
-      <CssBaseline />
-      <RioSdkContextProvider>
-        <AuthProvider>
-
+  <ThemeContextProvider>
+    <CssBaseline />
+    <FirebaseContextProvider>
+      <AuthProvider>
         <LoadingContextProvider>
           <UserContextProvider>
-            <BrowserRouter>
-              <App />
-            </BrowserRouter>
+            <DocumentationContextProvider>
+              <BrowserRouter>
+                <App />
+              </BrowserRouter>
+            </DocumentationContextProvider>
           </UserContextProvider>
-
-          </LoadingContextProvider>
-        </AuthProvider>
-      </RioSdkContextProvider>
-    </ThemeContextProvider>
+        </LoadingContextProvider>
+      </AuthProvider>
+    </FirebaseContextProvider>
+  </ThemeContextProvider>,
 )
 
 // If you want to start measuring performance in your app, pass a function

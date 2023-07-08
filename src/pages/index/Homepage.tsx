@@ -1,18 +1,19 @@
-import { Box, Container, Unstable_Grid2 as Grid } from '@mui/material';
+import { Box, Container, Unstable_Grid2 as Grid } from '@mui/material'
 // import { OverviewLatestOrders } from '../sections/overview/documentations';
-import { useEffect, useState } from 'react';
-import { OverviewLatestOrders } from './sections/documentations';
-import { useUserContext } from '../../contexts/UserContext';
+import { useEffect, useState } from 'react'
+import { OverviewLatestOrders } from './sections/documentations'
+import { useDocumentationContext } from '../../contexts/DocumentationContext'
 
 const Homepage = () => {
   const [docs, setDocs] = useState([])
-  const { detail } = useUserContext()
-
+  const { getDocumentations } = useDocumentationContext()
   useEffect(() => {
-    if (detail) {
-      setDocs(detail.documentations)
-    } 
-  }, [detail])
+    const getDocs = async () => {
+      const documentations = await getDocumentations()
+      setDocs(documentations)
+    }
+    getDocs()
+  }, [getDocumentations])
 
   return (
     <Box
@@ -34,5 +35,4 @@ const Homepage = () => {
   )
 }
 
-
-export default Homepage;
+export default Homepage

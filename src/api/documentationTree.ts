@@ -1,10 +1,10 @@
 import axios from 'axios'
-import { EXAM_API_URL } from './settings'
+import { DOCIFIER_API_URL } from './settings'
 
 export const getDocumentationTreeReq = async ({ docId, accessToken }) => {
     try {
       const request = await axios.post(
-        `${EXAM_API_URL}/Documentation/getDocumentationTree`,
+        `${DOCIFIER_API_URL}/Documentation/getDocumentationTree`,
         {
             docId
         },

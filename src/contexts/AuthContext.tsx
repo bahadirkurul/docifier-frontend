@@ -1,8 +1,7 @@
-import { createContext, useContext, useMemo } from "react";
-import { RetterCallResponse } from '@retter/sdk'
-import { LoginResponse } from "./models";
-import { isSuccess } from "../api/utils";
-import { useRioSdkContext } from "./RioSdkContext";
+import { createContext, useContext, useMemo, useState } from "react";
+import { signInWithCustomToken, signOut } from 'firebase/auth'
+import { useFirebaseContext } from "./FirebaseContext";
+import { signInRequest, signUpRequest } from "../api/auth";
 
 export interface IAuthContext {
   signIn: (email: string, password: string) => void;
@@ -24,55 +23,34 @@ export const AuthContext = createContext<IAuthContext>({
 
 export const AuthProvider = (props) => {
   const { children } = props;
-  const { rioSDK } = useRioSdkContext()
+  const { firebaseAuth } = useFirebaseContext();
 
   const auth = useMemo(
     () => ({
       signIn: async (email: string, password: string) => {
-        const methodResponse: RetterCallResponse<LoginResponse> = await rioSDK.makeStaticCall<any>({
-          classId: 'EnduserAuthorizer',
-          method: 'login',
-          body: {
-            email,
-            password,
-          },
-        })
+        const response = await signInRequest({email, password})
     
-        if (!isSuccess(methodResponse.status)) {
-          throw new Error('authenticate failed')
+        if (response.success === false) {
+          console.log("authenticate error");
+          throw new Error(response.error)
         }
-        
-        const authenticate = await rioSDK.authenticateWithCustomToken(methodResponse.data.token)
-        if (authenticate.authStatus === 'AUTH_FAILED') {
-          throw new Error('authenticate failed')
-        }
+
+        await signInWithCustomToken(firebaseAuth, response.data.token)
       },
       signUp: async (name: string, surname: string, email: string, password: string, confirmPassword: string) => {
-        const instanceResponse = await rioSDK.getCloudObject({
-          classId: 'EnduserAuthorizer',
-          body: {
-            name,
-            surname,
-            email,
-            password,
-            confirmPassword,
-          },
-        })
-        const response = instanceResponse.response as LoginResponse
-    
-        const authenticate = await rioSDK.authenticateWithCustomToken(response.token)
-        if (authenticate.authStatus === 'AUTH_FAILED') {
-          throw new Error('authenticate failed')
+        const response = await signUpRequest({name, surname, email, password, confirmPassword})
+
+        if (response.success === false) {
+          console.log("authenticate error");
+          throw new Error(response.error)
         }
+
+        await signInWithCustomToken(firebaseAuth, response.data.token)
       },
-      signOut:  async () => {
-        await rioSDK.signOut()
-        const authStatusPromise = await rioSDK.authStatus.toPromise()
-        if (authStatusPromise.authStatus === 'SIGNED_IN') {
-          throw new Error('Signout Failed')
-        }
-      }
-    }),[rioSDK]
+      signOut: async () => {
+        await signOut(firebaseAuth)
+      },
+    }),[firebaseAuth]
   )
 
   return (

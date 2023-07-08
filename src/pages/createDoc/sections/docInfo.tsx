@@ -9,19 +9,16 @@ import {
   Stack,
   TextField
 } from '@mui/material';
-import { createDocumentation } from '../../../api/documentation';
-import { useRioSdkContext } from '../../../contexts/RioSdkContext';
+import { useDocumentationContext } from '../../../contexts/DocumentationContext';
 
 export const CreateDocInfo = () => {
   const alias = useRef("")
-  const { rioSDK } = useRioSdkContext() as any;
-
+  const { createDocumentation } = useDocumentationContext()
   const handleSubmit = async (e: any) => {
     e.preventDefault()
-    await createDocumentation(rioSDK, { 
-      alias: alias.current['value'],
-    })
-
+    const asd = await createDocumentation(alias.current['value'])
+    console.log(asd);
+    
     // window.location.href = `/docs/overview?id=${createdDoc.docId}`
   }
 

@@ -1,10 +1,10 @@
 import axios from 'axios'
-import { EXAM_API_URL } from './settings'
+import { DOCIFIER_API_URL } from './settings'
 
 export const getDocumentationSheetReq = async ({ docId, sheetId, accessToken }) => {
     try {
       const request = await axios.post(
-        `${EXAM_API_URL}/Documentation/getDocumentationSheet`,
+        `${DOCIFIER_API_URL}/Documentation/getDocumentationSheet`,
         {
             docId,
             sheetId
@@ -25,7 +25,7 @@ export const getDocumentationSheetReq = async ({ docId, sheetId, accessToken }) 
 export const saveDocumentationSheetReq = async ({ docId, sheetId, data, accessToken }) => {
     try {
       const request = await axios.post(
-        `${EXAM_API_URL}/Documentation/saveDocumentationSheet`,
+        `${DOCIFIER_API_URL}/Documentation/saveDocumentationSheet`,
         {
             docId,
             sheetId,

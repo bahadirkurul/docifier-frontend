@@ -1,10 +1,9 @@
 import axios from 'axios'
-import { EXAM_API_URL } from './settings'
+import { DOCIFIER_API_URL } from './settings'
 
-export const loginRequest = async ({ email, password }) => {
+export const signInRequest = async ({ email, password }) => {
   try {
-
-    const request = await axios.post(`${EXAM_API_URL}/Auth/signIn`, {
+    const request = await axios.post(`${DOCIFIER_API_URL}/User/signIn`, {
       email,
       password,
     })
@@ -15,23 +14,20 @@ export const loginRequest = async ({ email, password }) => {
   }
 }
 
-export const logoutRequest = async ({ userId, accessToken }) => {
-    try {
-  
-      const request = await axios.post(
-        `${EXAM_API_URL}/Auth/signOut`,
-        {
-          userId,
-        },
-        {
-          headers: {
-            "_token": accessToken,
-          },
-        },
-      )
-  
-      return { success: true, data: request.data }
-    } catch (error: any) {
-      return { success: false, error: error.response.data }
-    }
+export const signUpRequest = async ({ name, surname, email, password, confirmPassword }) => {
+  try {
+    const request = await axios.post(`${DOCIFIER_API_URL}/User/signUp`, {
+      name,
+      surname,
+      email,
+      password,
+      confirmPassword,
+      userType: 'enduser',
+    })
+
+    return { success: true, data: request.data }
+  } catch (error: any) {
+    return { success: false, error: error.response.data }
   }
+}
+

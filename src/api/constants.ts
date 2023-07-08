@@ -3,7 +3,3 @@ export enum ProjectClassEnums {
     EnduserAuthorizer = 'EnduserAuthorizer',
     Documentation = 'Documentation',
 }
-
-export enum ProjectClassMethods {
-    login = 'login',
-}

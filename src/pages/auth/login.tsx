@@ -16,7 +16,7 @@ const Login = () => {
 
   const formik = useFormik({
     initialValues: {
-      email: 'bahadir@rettermobile.com',
+      email: 'bahadir@retter.io',
       password: 'qweasdzxc',
       submit: null,
     },
