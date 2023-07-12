@@ -10,7 +10,7 @@ import { Link as RouterLink } from 'react-router-dom';
 import { Link as MuiLink } from '@mui/material';
 
 const Login = () => {
-  const auth = useAuthContext() as any
+  const { signIn } = useAuthContext()
   const navigate = useNavigate()
   const { setLoadingStatus } = useLoadingContext()
 
@@ -27,7 +27,7 @@ const Login = () => {
     onSubmit: async (values, helpers) => {
       try {
         setLoadingStatus(true)
-        await auth.signIn(values.email, values.password)
+        await signIn(values.email, values.password)
         setLoadingStatus(false)
         navigate('/')
       } catch (err: any) {

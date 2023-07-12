@@ -30,7 +30,7 @@ export const UserContextProvider: React.FC<{ children: React.ReactNode }> = ({ c
 
         if (response.success === false) {
           console.log('createDocumentation error')
-          throw new Error(response.error)
+          throw new Error(response.error.message)
         }
 
         return response.data

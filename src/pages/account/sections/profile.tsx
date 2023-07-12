@@ -6,14 +6,15 @@ import { useUserContext } from '../../../contexts/UserContext'
 
 export const AccountProfile = ({ auth }) => {
   const { tokenClaims } = useUserContext()
-
+  
   const formik = useFormik({
     initialValues: {
-      email: '',
-      name: '',
-      surname: '',
+      email: tokenClaims?.claims.email,
+      name: tokenClaims?.claims.name,
+      surname: tokenClaims?.claims.surname,
       submit: null,
     },
+    enableReinitialize: true,
     validationSchema: Yup.object({
       email: Yup.string().email('Must be a valid email').max(255).required('Email is required'),
       password: Yup.string().max(255).required('Password is required'),
@@ -27,12 +28,6 @@ export const AccountProfile = ({ auth }) => {
       }
     },
   })
-
-  useEffect(() => {
-    formik.values.email = tokenClaims?.claims.email
-    formik.values.name = tokenClaims?.claims.name
-    formik.values.surname = tokenClaims?.claims.surname
-  }, [formik.values, tokenClaims?.claims.email, tokenClaims?.claims.name, tokenClaims?.claims.surname])
 
   return (
     <form noValidate onSubmit={formik.handleSubmit} style={{ width: '100%' }}>

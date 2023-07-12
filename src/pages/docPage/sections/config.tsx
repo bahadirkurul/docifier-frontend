@@ -13,7 +13,7 @@ export const staticDocTabs = (documentationId: string) => {
     {
       type: 'docTab',
       title: 'Overview',
-      path: `/docs/overview/${documentationId}`,
+      path: `/documentation/overview/${documentationId}`,
       icon: (
         <SvgIcon fontSize="small">
           <DocumentMagnifyingGlassIcon />
@@ -23,7 +23,7 @@ export const staticDocTabs = (documentationId: string) => {
     {
       type: 'docTab',
       title: 'Settings',
-      path: `/docs/settings/${documentationId}`,
+      path: `/documentation/settings/${documentationId}`,
       icon: (
         <SvgIcon fontSize="small">
           <Cog8ToothIcon />

@@ -156,7 +156,7 @@ export const DocSideNav = () => {
     <StyledTreeItem key={nodes.id} nodeId={nodes.id} label={nodes.name} 
     onClick={() => {
       if (!nodes.children || nodes.children?.length <= 0) {
-        navigate(`/docs/${documentationId}/${nodes.id}`)
+        navigate(`/documentation/${documentationId}/${nodes.id}`)
       }
     }}>
       {Array.isArray(nodes.children) ? nodes.children.map((node) => renderTree(node)) : null}

@@ -22,15 +22,15 @@ export const privateRoutes = [
     element: <Account />,
   },
   {
-    path: '/docs/:documentationId/:documentId',
+    path: '/documentation/:documentationId/:documentId',
     element: <DocDetails />,
   },
   {
-    path: '/docs/settings/:documentationId',
+    path: '/documentation/settings/:documentationId',
     element: <DocSettings />,
   },
   {
-    path: '/docs/overview/:documentationId',
+    path: '/documentation/overview/:documentationId',
     element: <DocOverview />,
   },
 ]

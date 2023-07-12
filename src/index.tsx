@@ -1,4 +1,3 @@
-import React from 'react'
 import ReactDOM from 'react-dom/client'
 import reportWebVitals from './reportWebVitals'
 import { BrowserRouter } from 'react-router-dom'
@@ -10,25 +9,39 @@ import { CssBaseline } from '@mui/material'
 import { LoadingContextProvider } from './contexts/LoadingContext'
 import { FirebaseContextProvider } from './contexts/FirebaseContext'
 import { DocumentationContextProvider } from './contexts/DocumentationContext'
+import { SnackbarProvider, VariantType, enqueueSnackbar } from 'notistack'
+
+export const notify = (message: string, alertVariant: VariantType, hideDuration: number) => {
+  enqueueSnackbar(message, {
+    variant: alertVariant,
+    autoHideDuration: hideDuration,
+    anchorOrigin: {
+      vertical: 'bottom',
+      horizontal: 'right',
+    },
+  })
+}
 
 const root = ReactDOM.createRoot(document.getElementById('root') as HTMLElement)
 
 root.render(
   <ThemeContextProvider>
     <CssBaseline />
-    <FirebaseContextProvider>
-      <AuthProvider>
-        <LoadingContextProvider>
-          <UserContextProvider>
-            <DocumentationContextProvider>
-              <BrowserRouter>
-                <App />
-              </BrowserRouter>
-            </DocumentationContextProvider>
-          </UserContextProvider>
-        </LoadingContextProvider>
-      </AuthProvider>
-    </FirebaseContextProvider>
+    <SnackbarProvider maxSnack={3}>
+      <FirebaseContextProvider>
+        <AuthProvider>
+          <LoadingContextProvider>
+            <UserContextProvider>
+              <DocumentationContextProvider>
+                <BrowserRouter>
+                  <App />
+                </BrowserRouter>
+              </DocumentationContextProvider>
+            </UserContextProvider>
+          </LoadingContextProvider>
+        </AuthProvider>
+      </FirebaseContextProvider>
+    </SnackbarProvider>
   </ThemeContextProvider>,
 )
 

@@ -14,19 +14,17 @@ import { useLocation, useParams } from "react-router-dom";
 import { documentations, userTabs } from "./config";
 import { useEffect, useState } from "react";
 import { useUserContext } from "../../contexts/UserContext";
+import { useDocumentationContext } from "../../contexts/DocumentationContext";
 
 export const SideNavigation = (props) => {
   const { open, onClose } = props;
   const lgUp = useMediaQuery((theme: any) => theme.breakpoints.up("lg"));
   const location = useLocation();
-  const [docs, setDocs] = useState([])
+  const { userDocumentations } = useDocumentationContext();
   let { documentationId } = useParams();
   
   useEffect(() => {
     document.title = "Docifier - Homepage";
-    // if (detail) {
-    //   setDocs(detail.documentations)
-    // }
   }, []);
 
   const content = (
@@ -135,7 +133,7 @@ export const SideNavigation = (props) => {
                 My Documentations
               </Typography>
             </Stack>
-            {documentations(docs)
+            {documentations(userDocumentations)
               .filter((i: any) => i.type === "documentation")
               .map((item: any) => {
                 const queryParams = new URLSearchParams(window.location.search);
@@ -271,7 +269,7 @@ export const SideNavigation = (props) => {
                 My Documentations
               </Typography>
             </Stack>
-            {documentations(docs)
+            {documentations(userDocumentations)
               .filter((i: any) => i.type === "documentation")
               .map((item: any) => {
                 const active = item.docId === documentationId ? true : false;

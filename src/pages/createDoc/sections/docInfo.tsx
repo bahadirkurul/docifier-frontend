@@ -10,16 +10,16 @@ import {
   TextField
 } from '@mui/material';
 import { useDocumentationContext } from '../../../contexts/DocumentationContext';
+import { notify } from '../../..';
 
 export const CreateDocInfo = () => {
   const alias = useRef("")
   const { createDocumentation } = useDocumentationContext()
   const handleSubmit = async (e: any) => {
     e.preventDefault()
-    const asd = await createDocumentation(alias.current['value'])
-    console.log(asd);
-    
-    // window.location.href = `/docs/overview?id=${createdDoc.docId}`
+    await createDocumentation(alias.current['value'])
+    notify('Documentation created successfully!', 'success', 3000)
+    // window.location.href = `/documentation/overview?id=${createdDoc.docId}`
   }
 
   return (

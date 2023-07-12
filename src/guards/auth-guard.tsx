@@ -1,12 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import Rio from '@retter/sdk'
 import { useFirebaseContext } from '../contexts/FirebaseContext';
-
-const rio = Rio.getInstance({
-  projectId: '7cgkuj6cl',
-  url: 'api.pinar.retter.io',
-})
 
 export const AuthGuard = (props) => {
   const { children } = props;

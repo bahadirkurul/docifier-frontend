@@ -4,21 +4,21 @@ import { useFirebaseContext } from "./FirebaseContext";
 import { signInRequest, signUpRequest } from "../api/auth";
 
 export interface IAuthContext {
-  signIn: (email: string, password: string) => void;
+  signIn: (email: string, password: string) => Promise<void>;
   signUp: (
     name: string,
     surname: string,
     email: string,
     password: string,
     confirmPassword: string,
-  ) => void;
-  signOut: () => void;
+  ) => Promise<void>;
+  signOut: () => Promise<void>;
 }
 
 export const AuthContext = createContext<IAuthContext>({
-  signIn: () => {},
-  signUp: () => {},
-  signOut: () => {},
+  signIn: async () => {},
+  signUp: async () => {},
+  signOut: async () => {},
 });
 
 export const AuthProvider = (props) => {

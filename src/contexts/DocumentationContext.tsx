@@ -1,22 +1,28 @@
-import { createContext, useContext, useMemo } from 'react'
+import { createContext, useContext, useEffect, useMemo, useState } from 'react'
 import { useUserContext } from './UserContext'
 import { createDocumentationRequest, deleteDocumentationRequest, getDocumentationsRequest } from '../api/documentation'
+import { useAuthContext } from './AuthContext'
+import { useFirebaseContext } from './FirebaseContext'
 
 export interface IDocumentationContext {
   createDocumentation: (alias: string) => Promise<any>
   deleteDocumentation: (documentationId: string) => Promise<any>
   getDocumentations: () => Promise<any>
+  userDocumentations: any[]
 }
 
 export const DocumentationContext = createContext<IDocumentationContext>({
   createDocumentation: async () => {},
   deleteDocumentation: async () => {},
   getDocumentations: async () => {},
+  userDocumentations: [],
 })
 
 export const DocumentationContextProvider =  (props) => {
   const { children } = props
   const { idToken } = useUserContext()
+  const { firebaseAuth } = useFirebaseContext()
+  const [userDocumentations, setUserDocumentations] = useState<any[]>([])
 
   const documentation = useMemo(
     () => ({
@@ -28,6 +34,7 @@ export const DocumentationContextProvider =  (props) => {
           throw new Error(response.error)
         }
 
+        await getUsersDocumentations()
         return response.data
       },
       getDocumentations: async () => {
@@ -38,6 +45,8 @@ export const DocumentationContextProvider =  (props) => {
           throw new Error(response.error)
         }
 
+        console.log(response.data);
+        
         return response.data
       },
       deleteDocumentation: async (documentationId: string) => {
@@ -48,11 +57,29 @@ export const DocumentationContextProvider =  (props) => {
           throw new Error(response.error)
         }
 
+        await getUsersDocumentations()
         return response.data
       },
+      userDocumentations,
     }),
-    [idToken],
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [idToken, userDocumentations],
   )
+
+  const getUsersDocumentations = async () => {
+    const docs = await documentation.getDocumentations()
+    setUserDocumentations(docs)
+  }
+
+  useEffect(() => {
+    firebaseAuth.onAuthStateChanged(async (user) => {
+      if (user && idToken) {
+        await getUsersDocumentations()
+      }
+    })
+    
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [idToken, firebaseAuth])
 
   return <DocumentationContext.Provider value={documentation}>{children}</DocumentationContext.Provider>
 }

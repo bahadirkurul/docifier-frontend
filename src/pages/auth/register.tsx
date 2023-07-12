@@ -10,7 +10,7 @@ import { Link as RouterLink } from 'react-router-dom';
 import { Link as MuiLink } from '@mui/material';
 
 const Register = () => {
-  const auth = useAuthContext() as any
+  const { signUp } = useAuthContext()
   const navigate = useNavigate()
   const [loading, setLoading] = useState(false)
   
@@ -30,8 +30,7 @@ const Register = () => {
       password: Yup.string()
         .max(255)
         .min(8, 'Password must be at least 8 characters')
-        .required('Password is required')
-        .equals([Yup.ref('confirmPassword')], 'Passwords must match'),
+        .required('Password is required'),
       confirmPassword: Yup.string()
         .max(255)
         .required('Password is required')
@@ -40,7 +39,7 @@ const Register = () => {
     onSubmit: async (values, helpers) => {
       try {
         setLoading(true)
-        await auth.signUp(values.name, values.surname, values.email, values.password, values.confirmPassword)
+        await signUp(values.name, values.surname, values.email, values.password, values.confirmPassword)
         setLoading(false)
         navigate('/')
       } catch (err: any) {

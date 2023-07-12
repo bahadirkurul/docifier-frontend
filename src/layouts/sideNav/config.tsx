@@ -9,7 +9,7 @@ export const documentations = (docs: any[]) => {
       type: 'documentation',
       docId: doc.documentationId,
       title: doc.alias,
-      path: `/docs/overview/${doc.documentationId}`,
+      path: `/documentation/overview/${doc.documentationId}`,
       icon: (
         <SvgIcon fontSize="small">
           <DocumentTextIcon />
